@@ -1,0 +1,42 @@
+{
+  "name": "dongv-ui-system",
+  "version": "1.0.0",
+  "description": "Reusable desktop operations UI tokens, CSS and React components from dongV.",
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": ["**/*.css"],
+  "files": ["dist", "src/tokens.css", "src/tokens.json", "compat", "README.md", "DESIGN.md", "PAGE-TEMPLATES.md", "MIGRATION.md", "SOURCE.md", "LICENSE"],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "style": "./dist/components.css",
+  "exports": {
+    ".": "./dist/index.js",
+    "./react": "./dist/index.js",
+    "./tokens.css": "./src/tokens.css",
+    "./tokens.json": "./src/tokens.json",
+    "./components.css": "./dist/components.css",
+    "./compat/youpu.css": "./compat/youpu.css"
+  },
+  "scripts": {
+    "tokens": "node scripts/generate-tokens.mjs",
+    "tokens:check": "node scripts/generate-tokens.mjs --check",
+    "build:lib": "vite build",
+    "build:example": "vite build --config example/vite.config.js",
+    "build": "npm run build:lib && npm run build:example",
+    "test": "npm run build:lib && node --test tests/*.test.mjs",
+    "scan": "node scripts/check.mjs",
+    "check": "npm run tokens:check && npm test && npm run build:example && npm run scan && npm pack --dry-run"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0 <20",
+    "react-dom": ">=18.2.0 <20"
+  },
+  "devDependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "vite": "^7.0.6"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

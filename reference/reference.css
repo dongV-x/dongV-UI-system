@@ -1,0 +1,21 @@
+:root { font-family: var(--dv-font-sans); font-size: var(--dv-font-body-size); background: var(--dv-stage-bg); color: var(--dv-text); }
+body { margin: 0; min-width: 320px; background: var(--dv-stage-bg); }
+button, select { min-height: var(--dv-control-height); border: 1px solid var(--dv-border); border-radius: var(--dv-radius-control); padding: 0 12px; background: var(--dv-surface); color: var(--dv-text); }
+button.primary { border-color: var(--dv-brand); background: var(--dv-brand); color: #fff; }
+.reference-shell { width: min(100%, var(--dv-page-canvas-max-width)); margin: 0 auto; padding: 24px 28px 40px; }
+.reference-shell h1 { margin: 0; font-size: var(--dv-font-title-size); line-height: var(--dv-font-title-line-height); }
+.reference-shell p, .reference-shell small, .reference-shell span { color: var(--dv-text-muted); }
+.reference-actions, .reference-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.reference-toolbar { justify-content: space-between; margin: 14px 0; padding: 10px 12px; border: 1px solid var(--dv-border); border-radius: var(--dv-radius-panel); background: var(--dv-surface); }
+.reference-toolbar label { display: flex; align-items: center; gap: 8px; color: var(--dv-text-muted); }
+.reference-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
+.reference-metrics article, .reference-panel { min-width: 0; border: 1px solid var(--dv-border); border-radius: var(--dv-radius-panel); background: var(--dv-surface); box-shadow: var(--dv-shadow-panel); }
+.reference-metrics article { display: grid; gap: 4px; padding: 16px 18px; }
+.reference-metrics strong { font-size: 28px; }
+.reference-panel > header { padding: 16px 18px 12px; }
+.reference-panel h2 { margin: 0; font-size: 16px; }
+.reference-panel p { margin: 4px 0 0; }
+.table-scroll { overflow-x: auto; padding: 0 18px 18px; }
+.youpu-data-table { min-width: 680px; }
+.youpu-data-table th, .youpu-data-table td { padding: 0 12px; border-bottom: 1px solid var(--dv-border); text-align: left; }
+@media (max-width: 1040px) { .reference-shell { padding-inline: 20px; } .reference-metrics { grid-template-columns: 1fr; } }

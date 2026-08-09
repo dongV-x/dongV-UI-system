@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="data:," />
+  <title>dongV UI System · CSS 参考页</title>
+  <link rel="stylesheet" href="../src/tokens.css" />
+  <link rel="stylesheet" href="../dist/components.css" />
+  <link rel="stylesheet" href="./reference.css" />
+</head>
+<body>
+  <main class="reference-shell">
+    <header class="youpu-page-header">
+      <div><h1>经营概览</h1><p>CSS-only 参考页 · 无业务数据</p></div>
+      <div class="reference-actions"><button id="theme-toggle" type="button">切换暗色</button><button class="primary" type="button">新建任务</button></div>
+    </header>
+    <nav class="youpu-page-tabs" aria-label="页面切换"><button class="active" type="button">总览</button><button type="button">趋势</button><button type="button">设置</button></nav>
+    <section class="reference-toolbar"><label>统计周期 <select><option>本周</option><option>本月</option></select></label><span class="youpu-status-badge is-positive">数据正常</span></section>
+    <section class="reference-metrics"><article><span>待处理</span><strong>8</strong><small>需要明确动作</small></article><article><span>已完成</span><strong>24</strong><small>本周累计</small></article><article><span>需关注</span><strong>3</strong><small>不自动替人判断</small></article></section>
+    <section class="reference-panel"><header><div><h2>当前任务</h2><p>标题、控件、面板和表格均来自同一 Token。</p></div></header><div class="table-scroll"><table class="youpu-data-table is-standard"><thead><tr><th>对象</th><th>状态</th><th>负责人</th><th>更新时间</th></tr></thead><tbody><tr><td>示例任务 A</td><td><span class="youpu-status-badge is-positive">正常</span></td><td>成员甲</td><td>今天</td></tr><tr><td>示例任务 B</td><td><span class="youpu-status-badge is-warning">关注</span></td><td>成员乙</td><td>昨天</td></tr><tr><td>示例任务 C</td><td><span class="youpu-status-badge is-neutral">待确认</span></td><td>成员丙</td><td>周一</td></tr></tbody></table></div></section>
+  </main>
+  <script>
+    const button = document.getElementById("theme-toggle");
+    button.addEventListener("click", () => {
+      const dark = document.documentElement.dataset.theme !== "dark";
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+      button.textContent = dark ? "切换亮色" : "切换暗色";
+    });
+  </script>
+</body>
+</html>

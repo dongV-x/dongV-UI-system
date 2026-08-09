@@ -1,0 +1,60 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+import React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import * as UI from "../dist/index.js";
+
+const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
+
+test("public exports include the agreed reusable surface", () => {
+  const expected = ["AppDialogProvider", "ClassificationTag", "ContributionDonutChart", "DataTable", "Drawer", "EmptyState", "ErrorState", "HelpPopover", "LoadingState", "MetaTag", "Modal", "PageHeader", "PageTabs", "Select", "SingleSelect", "StatusBadge", "TableToolbar", "Toast", "Tooltip", "TrendAreaChart", "useAppDialog"];
+  assert.deepEqual(Object.keys(UI).sort(), expected.sort());
+});
+
+test("tokens keep the 1.0 baseline and generated CSS has no legacy source variables", () => {
+  const tokens = JSON.parse(read("../src/tokens.json"));
+  const css = read("../src/tokens.css");
+  assert.equal(tokens.font.titleSize, "24px");
+  assert.equal(tokens.layout.controlHeight, "36px");
+  assert.equal(tokens.shape.panelRadius, "12px");
+  assert.match(css, /--dv-font-title-size: 24px/);
+  assert.doesNotMatch(css, /--yp-/);
+});
+
+test("Youpu compatibility aliases are generated from every public token", () => {
+  const tokens = read("../src/tokens.css").match(/--dv-[a-z0-9-]+(?=:)/g) || [];
+  const compat = read("../compat/youpu.css");
+  assert.ok(tokens.length > 30);
+  for (const token of new Set(tokens)) assert.match(compat, new RegExp(`--yp-${token.slice(5)}: var\\(${token}\\)`));
+});
+
+test("React primitives render semantic and accessible markup", () => {
+  const markup = renderToStaticMarkup(React.createElement("main", null,
+    React.createElement(UI.PageHeader, null, React.createElement("h1", null, "经营概览")),
+    React.createElement(UI.PageTabs, { "aria-label": "页面切换" }, React.createElement("button", { type: "button" }, "总览")),
+    React.createElement(UI.DataTable, { density: "compact" }, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "示例")))),
+    React.createElement(UI.StatusBadge, { tone: "success" }, "正常"),
+    React.createElement(UI.Modal, { title: "确认操作", portalTarget: null }, React.createElement("button", { type: "button" }, "确认")),
+    React.createElement(UI.Drawer, { ariaLabel: "详情", portalTarget: null }, React.createElement("button", { type: "button" }, "关闭")),
+    React.createElement(UI.LoadingState, null, "加载中"),
+    React.createElement(UI.ErrorState, null, "加载失败"),
+    React.createElement(UI.TrendAreaChart, null),
+  ));
+  assert.match(markup, /<header class="youpu-page-header"/);
+  assert.match(markup, /role="dialog" aria-modal="true"/);
+  assert.match(markup, /aria-label="详情"/);
+  assert.match(markup, /aria-live="polite"/);
+  assert.match(markup, /role="alert"/);
+});
+
+test("overlay source retains Escape, Tab trap and focus return", () => {
+  const overlay = read("../src/react/YoupuUI.jsx");
+  const dialog = read("../src/react/AppDialog.jsx");
+  for (const source of [overlay, dialog]) {
+    assert.match(source, /event\.key === "Escape"/);
+    assert.match(source, /event\.key !== "Tab"/);
+    assert.match(source, /previousFocusRef\.current/);
+    assert.match(source, /aria-modal="true"/);
+  }
+});
