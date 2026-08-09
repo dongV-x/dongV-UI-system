@@ -12,5 +12,5 @@
 | PKG-01 | pass | React/ReactDOM 18.3.1 与 19.2.8 均通过 5 项测试和生产构建 |
 | PKG-02 | pass | smoke 项目从 1.0.0 安装到临时 1.0.1，`npm ls` 显示 1.0.1，生产构建通过，再恢复 1.0.0 |
 | SEC-01 | pass | `npm run scan`：47 files，无敏感/超大/禁用文件，skipped/todo 0；tgz 12 files、19.5 kB |
-| SYNC-01 | pending | 待 GitHub Release 后让优谱安装同一 tgz |
-| DELIVERY-01 | pending | 待公开仓库、v1.0.0 Release 和优谱 PR |
+| SYNC-01 | pass | 有谱锁定 v1.0.0 Release tgz，React/CSS 改为公共包和薄转发；有谱 61/61、3965 modules、文档及内置浏览器验收通过；PR：https://github.com/dongV-x/youpu/pull/1 |
+| DELIVERY-01 | pass | 公开仓库、`v1.0.0` Tag、tgz/zip Release 和未合并的有谱 PR 均存在；Release：https://github.com/dongV-x/dongV-UI-system/releases/tag/v1.0.0；CI：https://github.com/dongV-x/dongV-UI-system/actions/runs/31329041466 |
