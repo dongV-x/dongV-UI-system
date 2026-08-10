@@ -67,6 +67,18 @@ test("component CSS stays inside the UI system instead of resetting the host pag
   assert.match(css, /\[class\*="youpu-"\]/);
 });
 
+test("focus styles stay neutral and never reuse brand selection fills", () => {
+  const css = read("../src/components.css");
+  const focusBlocks = [...css.matchAll(/([^{}]*:focus(?:-visible|-within)?[^{}]*)\{([^{}]*)\}/g)];
+  assert.ok(focusBlocks.length > 5);
+  for (const [, selector, body] of focusBlocks) {
+    assert.doesNotMatch(body, /(?:background|box-shadow|outline|border-color)[^;]*(?:--dv-brand|--brand|brand-soft|225\s+38\s+28|215\s+47\s+38)/i, selector.trim());
+  }
+  assert.match(css, /\.youpu-page-tabs > button:focus-visible \{ outline: 2px solid var\(--dv-text-muted\)/);
+  assert.match(css, /\.youpu-page-tabs > button\.active \{[^}]*background: transparent/s);
+  assert.match(css, /\.youpu-select-trigger:hover:not\(:disabled\) \{ border-color: var\(--dv-border-strong\)/);
+});
+
 test("Select and help containers expose honest ARIA contracts", () => {
   const select = renderToStaticMarkup(React.createElement(UI.Select, {
     ariaLabel: "选择店铺",
