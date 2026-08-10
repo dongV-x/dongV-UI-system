@@ -14,3 +14,11 @@
 | SEC-01 | pass | `npm run scan`：47 files，无敏感/超大/禁用文件，skipped/todo 0；tgz 12 files、19.5 kB |
 | SYNC-01 | pass | 有谱锁定 v1.0.0 Release tgz，React/CSS 改为公共包和薄转发；有谱 61/61、3965 modules、文档及内置浏览器验收通过；PR：https://github.com/dongV-x/youpu/pull/1 |
 | DELIVERY-01 | pass | 公开仓库、`v1.0.0` Tag、tgz/zip Release 和未合并的有谱 PR 均存在；Release：https://github.com/dongV-x/dongV-UI-system/releases/tag/v1.0.0；CI：https://github.com/dongV-x/dongV-UI-system/actions/runs/31329041466 |
+
+## 1.0.2 焦点样式补丁
+
+| ID | 状态 | 直接证据 |
+|---|---|---|
+| FOCUS-01 | pass | `npm run check`：9/9 tests、library/example build、scan、pack dry-run 全部通过 |
+| FOCUS-02 | pass | Codex 内置浏览器 1440 亮色：未选中页签背景透明、焦点为 `#6d7684` 2px；Select 聚焦边框 `#cfd6e2`、无阴影、无粉红底色 |
+| FOCUS-03 | pass | Codex 内置浏览器 960 暗色：Select 背景 `#22262d`、边框 `#4c5664`、焦点 `#a7afb9` 2px、横向溢出 0，Console 无 warning/error |
