@@ -36,13 +36,17 @@ flowchart TD
 
 ## 组件边界
 
-- 自研组件负责有明确交互契约的 PageHeader、Tabs、表格、状态、Select、浮层、页面状态和两类图表。
+- 普通表单优先使用原生控件；需要浮层定位、表格紧凑模式或统一键盘契约时再用公共 `Select`。
+- `Select` 是新项目入口；`SingleSelect`、`youpu-*` class 和 `compat/youpu.css` 只为有谱 V1 兼容保留，不继续扩展第二套能力。
+- 自研组件只负责已有明确契约的 PageHeader、Tabs、表格、状态、浮层、页面状态和两类图表。
 - Arco 只允许目标项目自行选用；本包不导入、不要求安装。
 - 新需求先作为单页实现；至少第二处出现且用途一致，才进入共享层。
+- `components.css` 只作用于本包组件范围，不提供全站 reset，不应修改宿主项目的普通按钮、表单、焦点或动效。
 
 ## 无障碍
 
 - 所有交互可用键盘完成；焦点清晰可见。
-- Modal、Drawer、AppDialog 使用 dialog 语义、`aria-modal`、Escape 关闭、Tab 圈定和关闭后焦点归还。
-- Tooltip 只放短说明；需要点击、复制或长内容时用 HelpPopover、Modal 或 Drawer。
-- 遵循 `prefers-reduced-motion`。
+- `Select` 按非可编辑 combobox + listbox 契约暴露状态、当前选项和键盘导航。
+- Modal、Drawer、AppDialog 使用 dialog 语义、`aria-modal`、Escape 关闭、Tab 圈定和关闭后焦点归还；标题和描述 ID 必须唯一，空描述不建立无效引用。
+- Tooltip 只放非交互短说明。`HelpPopover` 只是样式容器，不默认冒充 tooltip；调用方必须自行提供 `role`、`id` 和触发器关系，含点击、复制或表单时改用 Modal 或 Drawer。
+- 遵循 `prefers-reduced-motion`，且只影响本包组件范围。

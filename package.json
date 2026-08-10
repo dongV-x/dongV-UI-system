@@ -1,11 +1,24 @@
 {
   "name": "dongv-ui-system",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reusable desktop operations UI tokens, CSS and React components from dongV.",
   "type": "module",
   "license": "MIT",
-  "sideEffects": ["**/*.css"],
-  "files": ["dist", "src/tokens.css", "src/tokens.json", "compat", "README.md", "DESIGN.md", "PAGE-TEMPLATES.md", "MIGRATION.md", "SOURCE.md", "LICENSE"],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "src/tokens.css",
+    "src/tokens.json",
+    "compat",
+    "README.md",
+    "DESIGN.md",
+    "PAGE-TEMPLATES.md",
+    "MIGRATION.md",
+    "SOURCE.md",
+    "LICENSE"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "style": "./dist/components.css",

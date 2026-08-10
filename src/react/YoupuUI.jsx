@@ -70,6 +70,7 @@ export function Select({ ariaLabel, className = "", compactTable = false, conten
   const id = React.useId().replaceAll(":", "");
   const triggerRef = React.useRef(null);
   const menuRef = React.useRef(null);
+  const optionRefs = React.useRef([]);
   const [open, setOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(-1);
   const [position, setPosition] = React.useState(null);
@@ -104,12 +105,15 @@ export function Select({ ariaLabel, className = "", compactTable = false, conten
   }, [open, updatePosition]);
 
   const enabledIndex = (start, direction) => {
-    for (let step = 0; step < options.length; step += 1) {
-      const index = (start + direction * step + options.length) % options.length;
+    for (let index = start; index >= 0 && index < options.length; index += direction) {
       if (!options[index]?.disabled) return index;
     }
     return -1;
   };
+  React.useEffect(() => {
+    if (open && activeIndex >= 0) optionRefs.current[activeIndex]?.scrollIntoView?.({ block: "nearest" });
+  }, [activeIndex, open]);
+
   const openMenu = () => {
     if (disabled) return;
     setActiveIndex(selectedIndex >= 0 && !options[selectedIndex]?.disabled ? selectedIndex : enabledIndex(0, 1));
@@ -129,7 +133,7 @@ export function Select({ ariaLabel, className = "", compactTable = false, conten
       return;
     }
     if (event.key === "Tab") {
-      setOpen(false);
+      if (open && activeIndex >= 0) choose(activeIndex); else setOpen(false);
       return;
     }
     if (event.key === "Enter" || event.key === " ") {
@@ -150,20 +154,22 @@ export function Select({ ariaLabel, className = "", compactTable = false, conten
         return;
       }
       const direction = event.key === "ArrowDown" ? 1 : -1;
-      setActiveIndex(enabledIndex(activeIndex + direction, direction));
+      const next = enabledIndex(activeIndex + direction, direction);
+      if (next >= 0) setActiveIndex(next);
     }
   };
 
   const menu = open && position ? renderOverlay(
     <div ref={menuRef} className="youpu-select-menu" id={`${id}-listbox`} role="listbox" aria-label={ariaLabel} style={position}>
       {options.map((option, index) => <button
-        aria-selected={index === selectedIndex}
+        aria-selected={open ? index === activeIndex : index === selectedIndex}
         className={classNames("youpu-select-option", index === activeIndex && "is-active", index === selectedIndex && "is-selected")}
         disabled={option.disabled}
         id={`${id}-option-${index}`}
         key={String(option.value)}
         onClick={() => choose(index)}
         onMouseEnter={() => !option.disabled && setActiveIndex(index)}
+        ref={(element) => { optionRefs.current[index] = element; }}
         role="option"
         tabIndex={-1}
         type="button"
@@ -174,6 +180,7 @@ export function Select({ ariaLabel, className = "", compactTable = false, conten
   return <div className={classNames("youpu-select", contentWidth && "is-content-width", compactTable && "is-table-compact", open && "is-open", disabled && "is-disabled", className)}>
     <button
       aria-activedescendant={open && activeIndex >= 0 ? `${id}-option-${activeIndex}` : undefined}
+      aria-autocomplete="none"
       aria-controls={`${id}-listbox`}
       aria-expanded={open}
       aria-haspopup="listbox"
@@ -183,6 +190,7 @@ export function Select({ ariaLabel, className = "", compactTable = false, conten
       onClick={() => open ? setOpen(false) : openMenu()}
       onKeyDown={handleKeyDown}
       ref={triggerRef}
+      role="combobox"
       type="button"
     ><span className={selected ? "" : "is-placeholder"}>{selected?.label || placeholder}</span><span aria-hidden="true" className="youpu-select-chevron" /></button>
     {menu}
@@ -276,7 +284,7 @@ export function Tooltip({ as: Element = "span", className = "", ...props }) {
 }
 
 export function HelpPopover({ as: Element = "aside", className = "", ...props }) {
-  return <Element className={classNames("youpu-help-popover", className)} role="tooltip" {...props} />;
+  return <Element className={classNames("youpu-help-popover", className)} {...props} />;
 }
 
 export function LoadingState({ as: Element = "div", className = "", ...props }) {

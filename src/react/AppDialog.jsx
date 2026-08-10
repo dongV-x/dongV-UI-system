@@ -10,6 +10,8 @@ export function AppDialogProvider({ children }) {
   const panelRef = React.useRef(null);
   const cancelRef = React.useRef(null);
   const confirmRef = React.useRef(null);
+  const titleId = React.useId();
+  const descriptionId = React.useId();
 
   const close = React.useCallback((accepted) => {
     const resolve = resolverRef.current;
@@ -77,13 +79,13 @@ export function AppDialogProvider({ children }) {
             className="youpu-dialog"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="youpu-dialog-title"
-            aria-describedby="youpu-dialog-description"
+            aria-labelledby={titleId}
+            aria-describedby={dialog.description ? descriptionId : undefined}
           >
             <header>
-              <h2 id="youpu-dialog-title">{dialog.title}</h2>
+              <h2 id={titleId}>{dialog.title}</h2>
             </header>
-            {dialog.description && <p id="youpu-dialog-description">{dialog.description}</p>}
+            {dialog.description && <p id={descriptionId}>{dialog.description}</p>}
             {dialog.note && <div className="youpu-dialog-note">{dialog.note}</div>}
             <footer>
               {dialog.cancelable && <button ref={cancelRef} className="youpu-dialog-cancel" type="button" onClick={() => close(false)}>{dialog.cancelLabel}</button>}

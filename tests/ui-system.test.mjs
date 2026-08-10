@@ -58,3 +58,34 @@ test("overlay source retains Escape, Tab trap and focus return", () => {
     assert.match(source, /aria-modal="true"/);
   }
 });
+
+test("component CSS stays inside the UI system instead of resetting the host page", () => {
+  const css = read("../src/components.css");
+  assert.doesNotMatch(css, /^\*, \*::before, \*::after/m);
+  assert.doesNotMatch(css, /^:where\(button, input, select, textarea\)/m);
+  assert.doesNotMatch(css, /prefers-reduced-motion: reduce\) \{ \*,/);
+  assert.match(css, /\[class\*="youpu-"\]/);
+});
+
+test("Select and help containers expose honest ARIA contracts", () => {
+  const select = renderToStaticMarkup(React.createElement(UI.Select, {
+    ariaLabel: "选择店铺",
+    options: [{ value: "all", label: "全部店铺" }],
+    value: "all",
+  }));
+  const help = renderToStaticMarkup(React.createElement(UI.HelpPopover, null, "帮助内容"));
+  const explicitHelp = renderToStaticMarkup(React.createElement(UI.HelpPopover, { role: "note" }, "帮助内容"));
+  assert.match(select, /role="combobox"/);
+  assert.match(select, /aria-autocomplete="none"/);
+  assert.match(select, /aria-controls=/);
+  assert.match(read("../src/react/YoupuUI.jsx"), /if \(next >= 0\) setActiveIndex\(next\)/);
+  assert.doesNotMatch(help, /role="tooltip"/);
+  assert.match(explicitHelp, /role="note"/);
+});
+
+test("AppDialog uses unique IDs and only references a rendered description", () => {
+  const dialog = read("../src/react/AppDialog.jsx");
+  assert.match(dialog, /React\.useId\(\)/);
+  assert.match(dialog, /aria-describedby=\{dialog\.description \? descriptionId : undefined\}/);
+  assert.doesNotMatch(dialog, /id="youpu-dialog-(title|description)"/);
+});

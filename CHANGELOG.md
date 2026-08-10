@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 - 2026-08-10
+
+- 收口组件 CSS 作用域，避免修改宿主页面的普通元素、焦点和 reduced-motion。
+- 校准 Select、HelpPopover 与 AppDialog 的 ARIA、唯一 ID 和描述引用。
+- 说明 Tokens、React 组件、CSS 兼容层三档接入方式，以及 Release tgz 与源码 ZIP 的区别。
+- 升级 GitHub Actions 到 Node 24 运行时对应的官方版本。
+
 ## 1.0.0 - 2026-08-09
 
 - 建立 `--dv-*` 亮暗主题 Tokens 与 `--yp-*` 兼容层。

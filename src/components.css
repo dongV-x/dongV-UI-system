@@ -28,10 +28,19 @@
   --donut-soft: var(--dv-surface-soft);
   --donut-text: var(--dv-text);
 }
-*, *::before, *::after { box-sizing: border-box; }
-:where(button, input, select, textarea) { color: inherit; font: inherit; }
-:where(button, [role="button"], [tabindex]):focus-visible { outline: 3px solid color-mix(in srgb, var(--dv-brand) 24%, transparent); outline-offset: 2px; }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
+/* Scope shared defaults to package components; importing this file must not reset the host app. */
+:where([class*="youpu-"], [class*="trend-area-chart"], [class*="contribution-donut"]),
+:where([class*="youpu-"], [class*="trend-area-chart"], [class*="contribution-donut"]) *,
+:where([class*="youpu-"], [class*="trend-area-chart"], [class*="contribution-donut"])::before,
+:where([class*="youpu-"], [class*="trend-area-chart"], [class*="contribution-donut"])::after,
+:where([class*="youpu-"], [class*="trend-area-chart"], [class*="contribution-donut"]) *::before,
+:where([class*="youpu-"], [class*="trend-area-chart"], [class*="contribution-donut"]) *::after { box-sizing: border-box; }
+:where([class*="youpu-"]) :where(button, input, select, textarea) { color: inherit; font: inherit; }
+:where([class*="youpu-"]) :where(button, [role="button"], [tabindex]):focus-visible { outline: 3px solid color-mix(in srgb, var(--dv-brand) 24%, transparent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  :where([class*="youpu-"], [class*="trend-area-chart"], [class*="contribution-donut"]),
+  :where([class*="youpu-"], [class*="trend-area-chart"], [class*="contribution-donut"]) * { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
 /* youpu-ui.css */
 .youpu-page-header {
   min-height: var(--youpu-page-header-min-height, var(--dv-title-bar-min-height));
