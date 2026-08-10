@@ -6,6 +6,6 @@
 4. 已完成：公开仓库、MIT、`v1.0.0` Tag、tgz/zip Release 和 GitHub Actions。
 5. 已完成：有谱安装同一 Release 包，不再保留第二份可编辑共享实现；61/61、3965 modules 和内置浏览器验收通过。
 6. 有谱 PR：https://github.com/dongV-x/youpu/pull/1，保持未合并，等待 dongV 审阅。
-7. 已完成本地 v1.0.1 候选审计：收口宿主样式污染，校准 Select / HelpPopover / AppDialog 无障碍，升级 CI Action，并把接入方式压缩为 Tokens、React、兼容 CSS 三档。
-8. 候选包已通过 8/8、全新 tgz 安装、0 漏洞、Vite 构建、Lighthouse Accessibility 100 和有谱 3965 modules 集成构建；尚未提交、推送或发布。
-9. 下一步：dongV 明确批准后发布 v1.0.1，再让有谱 PR 升级同一 Release；未部署、未修改正式数据。
+7. 已发布 `v1.0.1`：收口宿主样式污染，校准 Select / HelpPopover / AppDialog 无障碍，升级 CI Action，并把接入方式压缩为 Tokens、React、兼容 CSS 三档。
+8. `main` 与 `v1.0.1` 两次 GitHub CI 均通过 React 18/19 矩阵；真实 Release tgz 已在全新项目完成安装、0 漏洞、Vite 构建、内置浏览器与 Lighthouse Accessibility 100 验收。
+9. 下一步：让有谱 PR #1 升级同一 `v1.0.1` Release；仍不合并、不部署、不操作 Windows、不修改正式数据。
