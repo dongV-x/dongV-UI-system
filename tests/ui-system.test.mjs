@@ -101,3 +101,13 @@ test("AppDialog uses unique IDs and only references a rendered description", () 
   assert.match(dialog, /aria-describedby=\{dialog\.description \? descriptionId : undefined\}/);
   assert.doesNotMatch(dialog, /id="youpu-dialog-(title|description)"/);
 });
+
+
+test("bounded containers and table cells keep a safe content inset", () => {
+  const css = read("../src/components.css");
+  const design = read("../DESIGN.md");
+  assert.match(css, /\.youpu-data-table :is\(th, td\) \{[^}]*padding-block:[^}]*6px[^}]*padding-inline:[^}]*10px/s);
+  assert.match(css, /\.youpu-empty-state,[^}]*padding: var\(--youpu-state-padding, 16px\)/s);
+  assert.match(design, /表头和普通单元格默认横向 10px、纵向 6px/);
+  assert.match(design, /标题、数值、状态或操作已经说清时不加重复副文案/);
+});
