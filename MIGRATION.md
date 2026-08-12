@@ -32,8 +32,8 @@ flowchart TD
 - 宿主项目若有局部 `:focus` / `:focus-visible` 品牌色规则，应同步改为中性边框或中性焦点线。
 
 
-## 下一版本安全间距
+## 1.0.4 状态与安全间距
 
-- `DataTable` 的 `th/td` 默认使用横向 `10px`、纵向 `6px` 内边距；紧凑业务页可通过 `--youpu-data-table-cell-padding-inline` 和 `--youpu-data-table-cell-padding-block` 覆盖，但不得压到零。
-- `LoadingState`、`EmptyState`、`ErrorState` 默认有 `16px` 内边距；大表空状态仍应由业务页增加最小高度和至少 `24px` 留白。
-- 若旧页面已给单元格设置 padding，升级后检查是否重复；保留一处明确规则即可。
+- `DataTable` 的 `th/td` 默认使用横向 `10px`、纵向 `6px` 内边距并垂直居中；多行内容可在单元格设置 `data-vertical-align="top"`。紧凑业务页可覆盖两个 padding 变量，但不得压到零。
+- `LoadingState`、`EmptyState`、`ErrorState` 新增 `scope="inline|table|section|page"`。默认 `section`；表格空状态使用 `table`，整页加载或错误使用 `page`，紧邻控件的短状态使用 `inline`。
+- 公共状态组件现在默认负责 padding、居中和最小高度。旧页面若已有完整状态布局，应删除重复规则或确认其没有把公共 padding 压成零。

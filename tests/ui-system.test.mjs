@@ -37,14 +37,20 @@ test("React primitives render semantic and accessible markup", () => {
     React.createElement(UI.StatusBadge, { tone: "success" }, "正常"),
     React.createElement(UI.Modal, { title: "确认操作", portalTarget: null }, React.createElement("button", { type: "button" }, "确认")),
     React.createElement(UI.Drawer, { ariaLabel: "详情", portalTarget: null }, React.createElement("button", { type: "button" }, "关闭")),
-    React.createElement(UI.LoadingState, null, "加载中"),
-    React.createElement(UI.ErrorState, null, "加载失败"),
+    React.createElement(UI.LoadingState, { scope: "inline" }, "加载中"),
+    React.createElement(UI.EmptyState, { scope: "table" }, "暂无数据"),
+    React.createElement(UI.EmptyState, null, "暂无内容"),
+    React.createElement(UI.ErrorState, { scope: "page" }, "加载失败"),
     React.createElement(UI.TrendAreaChart, null),
   ));
   assert.match(markup, /<header class="youpu-page-header"/);
   assert.match(markup, /role="dialog" aria-modal="true"/);
   assert.match(markup, /aria-label="详情"/);
   assert.match(markup, /aria-live="polite"/);
+  assert.match(markup, /data-scope="inline"/);
+  assert.match(markup, /data-scope="table"/);
+  assert.match(markup, /data-scope="section"/);
+  assert.match(markup, /data-scope="page"/);
   assert.match(markup, /role="alert"/);
 });
 
@@ -103,11 +109,16 @@ test("AppDialog uses unique IDs and only references a rendered description", () 
 });
 
 
-test("bounded containers and table cells keep a safe content inset", () => {
+test("tables and page states keep safe alignment and spacing defaults", () => {
   const css = read("../src/components.css");
   const design = read("../DESIGN.md");
-  assert.match(css, /\.youpu-data-table :is\(th, td\) \{[^}]*padding-block:[^}]*6px[^}]*padding-inline:[^}]*10px/s);
-  assert.match(css, /\.youpu-empty-state,[^}]*padding: var\(--youpu-state-padding, 16px\)/s);
+  assert.match(css, /\.youpu-data-table :is\(th, td\) \{[^}]*padding-block:[^}]*6px[^}]*padding-inline:[^}]*10px[^}]*vertical-align: middle/s);
+  assert.match(css, /data-vertical-align="top"[^}]*vertical-align: top/);
+  assert.match(css, /\.youpu-empty-state,[^}]*display: grid[^}]*align-content: center[^}]*justify-items: center[^}]*padding: var\(--youpu-state-padding, 24px\)/s);
+  assert.match(css, /data-scope="inline"[^}]*justify-items: start[^}]*text-align: left/s);
+  assert.match(css, /data-scope="table"[^}]*160px[^}]*24px/s);
+  assert.match(css, /data-scope="page"[^}]*360px[^}]*48px 24px/s);
   assert.match(design, /表头和普通单元格默认横向 10px、纵向 6px/);
+  assert.match(design, /inline.*table.*section.*page/s);
   assert.match(design, /标题、数值、状态或操作已经说清时不加重复副文案/);
 });

@@ -287,16 +287,20 @@ export function HelpPopover({ as: Element = "aside", className = "", ...props })
   return <Element className={classNames("youpu-help-popover", className)} {...props} />;
 }
 
-export function LoadingState({ as: Element = "div", className = "", ...props }) {
-  return <Element className={classNames("youpu-loading-state", className)} role="status" aria-live="polite" {...props} />;
+function PageState({ as: Element = "div", className = "", scope = "section", ...props }) {
+  return <Element className={className} data-scope={scope} {...props} />;
 }
 
-export function EmptyState({ as: Element = "div", className = "", ...props }) {
-  return <Element className={classNames("youpu-empty-state", className)} role="status" {...props} />;
+export function LoadingState({ className = "", ...props }) {
+  return <PageState className={classNames("youpu-loading-state", className)} role="status" aria-live="polite" {...props} />;
 }
 
-export function ErrorState({ as: Element = "div", className = "", ...props }) {
-  return <Element className={classNames("youpu-error-state", className)} role="alert" {...props} />;
+export function EmptyState({ className = "", ...props }) {
+  return <PageState className={classNames("youpu-empty-state", className)} role="status" {...props} />;
+}
+
+export function ErrorState({ className = "", ...props }) {
+  return <PageState className={classNames("youpu-error-state", className)} role="alert" {...props} />;
 }
 
 export function Toast({ tone = "success", className = "", ...props }) {

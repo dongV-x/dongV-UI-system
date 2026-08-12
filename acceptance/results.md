@@ -22,3 +22,14 @@
 | FOCUS-01 | pass | `npm run check`：9/9 tests、library/example build、scan、pack dry-run 全部通过 |
 | FOCUS-02 | pass | Codex 内置浏览器 1440 亮色：未选中页签背景透明、焦点为 `#6d7684` 2px；Select 聚焦边框 `#cfd6e2`、无阴影、无粉红底色 |
 | FOCUS-03 | pass | Codex 内置浏览器 960 暗色：Select 背景 `#22262d`、边框 `#4c5664`、焦点 `#a7afb9` 2px、横向溢出 0，Console 无 warning/error |
+
+
+## 1.0.4 状态、表格与文案护栏
+
+| ID | 状态 | 直接证据 |
+|---|---|---|
+| STATE-01 | pass | Codex 内置浏览器实测 960 亮/暗：inline 8px 0 左对齐；table 160px/24px；section 120px/24px；page 360px/48px 24px；整页横向溢出 0 |
+| TABLE-01 | pass | Codex 内置浏览器实测普通单元格 padding 6px 10px、vertical-align middle；多行示例 data-vertical-align=top 生效 |
+| COPY-01 | pass | DESIGN.md 固化副文案三类准入、无动作空状态一句事实和技术详情边界；示例状态不使用重复说明 |
+| PKG-03 | pass | `npm run check`：10/10 tests、library/example build、scan、pack dry-run 全部通过；包 12 files、22.1 kB |
+| A11Y-02 | pass | Codex 内置浏览器 960 亮/暗主题均无横向溢出，Console 无 warning/error |
