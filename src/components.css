@@ -103,6 +103,10 @@
   border-collapse: collapse;
   font-variant-numeric: tabular-nums;
 }
+.youpu-data-table :is(th, td) {
+  padding-block: var(--youpu-data-table-cell-padding-block, 6px);
+  padding-inline: var(--youpu-data-table-cell-padding-inline, 10px);
+}
 .youpu-data-table th { height: var(--youpu-data-table-head-height, var(--dv-table-header-height)); }
 .youpu-data-table.is-compact td { height: var(--youpu-data-table-row-height-compact, var(--dv-table-row-height-compact)); }
 .youpu-data-table.is-standard td { height: var(--youpu-data-table-row-height-standard, var(--dv-table-row-height-standard)); }
@@ -245,7 +249,7 @@
 .youpu-help-popover { z-index: var(--youpu-popover-z, 1200); }
 .youpu-loading-state,
 .youpu-empty-state,
-.youpu-error-state { min-width: 0; }
+.youpu-error-state { min-width: 0; padding: var(--youpu-state-padding, 16px); }
 .youpu-error-state { color: var(--danger, var(--dv-danger)); }
 .youpu-toast { z-index: var(--youpu-toast-z, 1500); }
 

@@ -30,3 +30,10 @@ flowchart TD
 - 公共组件焦点由品牌红光圈改为中性焦点线。
 - `PageTabs`、`Select` 和 `SingleSelect` 不再把焦点或悬停显示成粉红底色；真实选中态仍通过文字、下划线或中性底色辨认。
 - 宿主项目若有局部 `:focus` / `:focus-visible` 品牌色规则，应同步改为中性边框或中性焦点线。
+
+
+## 下一版本安全间距
+
+- `DataTable` 的 `th/td` 默认使用横向 `10px`、纵向 `6px` 内边距；紧凑业务页可通过 `--youpu-data-table-cell-padding-inline` 和 `--youpu-data-table-cell-padding-block` 覆盖，但不得压到零。
+- `LoadingState`、`EmptyState`、`ErrorState` 默认有 `16px` 内边距；大表空状态仍应由业务页增加最小高度和至少 `24px` 留白。
+- 若旧页面已给单元格设置 padding，升级后检查是否重复；保留一处明确规则即可。
