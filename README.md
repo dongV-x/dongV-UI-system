@@ -18,22 +18,22 @@
 
 ## 普通使用者
 
-从 GitHub Release 下载 `dongv-ui-system-1.0.1.tgz`，然后安装：
+从 GitHub Release 下载 `dongv-ui-system-1.0.4.tgz`，然后安装：
 
 ```bash
-npm install ./dongv-ui-system-1.0.1.tgz
+npm install ./dongv-ui-system-1.0.4.tgz
 ```
 
 也可直接安装公开 Release：
 
 ```bash
-npm install https://github.com/dongV-x/dongV-UI-system/releases/download/v1.0.1/dongv-ui-system-1.0.1.tgz
+npm install https://github.com/dongV-x/dongV-UI-system/releases/download/v1.0.4/dongv-ui-system-1.0.4.tgz
 ```
 
 ## React 项目
 
 ```jsx
-import { PageHeader, DataTable, StatusBadge } from "dongv-ui-system/react";
+import { PageHeader, DataTable, EmptyState, StatusBadge } from "dongv-ui-system/react";
 import "dongv-ui-system/tokens.css";
 import "dongv-ui-system/components.css";
 ```
@@ -41,6 +41,7 @@ import "dongv-ui-system/components.css";
 ```jsx
 <PageHeader><h1>经营概览</h1></PageHeader>
 <DataTable density="standard">...</DataTable>
+<EmptyState scope="table">暂无数据</EmptyState>
 <StatusBadge tone="success">正常</StatusBadge>
 ```
 

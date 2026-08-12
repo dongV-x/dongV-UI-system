@@ -11,7 +11,11 @@ button { min-height: var(--dv-control-height); border: 1px solid var(--dv-border
 .demo-panel h2 { margin: 0 0 12px; font-size: 16px; }
 .demo-table-wrap { overflow-x: auto; }
 .youpu-data-table { min-width: 680px; }
-.youpu-data-table th, .youpu-data-table td { padding: 0 12px; border-bottom: 1px solid var(--dv-border); text-align: left; }
+.youpu-data-table th, .youpu-data-table td { border-bottom: 1px solid var(--dv-border); text-align: left; }
+.demo-cell-meta { display: block; margin-top: 4px; color: var(--dv-text-muted); font-size: 12px; font-weight: 400; }
+.demo-states { display: grid; gap: 12px; }
+.demo-states > :is(.youpu-loading-state, .youpu-empty-state, .youpu-error-state) { border: 1px dashed var(--dv-border); border-radius: var(--dv-radius-panel); background: var(--dv-surface-soft); }
+.demo-states .youpu-error-state button { margin-top: 4px; }
 .youpu-page-tabs { border-color: var(--dv-border); }
 .youpu-page-tabs > button { color: var(--dv-text-muted); }
 .youpu-page-tabs > button.active { color: var(--dv-brand); border-bottom-color: var(--dv-brand); background: transparent; }
@@ -21,4 +25,4 @@ button { min-height: var(--dv-control-height); border: 1px solid var(--dv-border
 .youpu-drawer .overlay-body { min-height: 100%; }
 .demo-states { margin-top: 14px; color: var(--dv-text-muted); }
 .youpu-toast { padding: 8px 10px; border-radius: var(--dv-radius-control); background: var(--dv-success-soft); color: var(--dv-success); }
-@media (max-width: 1040px) { .demo-grid { grid-template-columns: 1fr; } .demo-shell { padding-inline: 20px; } }
+@media (max-width: 1040px) { .demo-grid { grid-template-columns: 1fr; } .demo-shell { width: 960px; padding-inline: 20px; } }
