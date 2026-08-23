@@ -8,7 +8,7 @@ import * as UI from "../dist/index.js";
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
 test("public exports include the agreed reusable surface", () => {
-  const expected = ["AppDialogProvider", "Button", "ClassificationTag", "ContributionDonutChart", "DataTable", "Drawer", "EmptyState", "ErrorState", "Field", "HelpPopover", "Input", "LoadingState", "MetaTag", "Modal", "PageHeader", "PageTabs", "Select", "SingleSelect", "StatusBadge", "TableToolbar", "Toast", "Tooltip", "TrendAreaChart", "useAppDialog"];
+  const expected = ["AppDialogProvider", "Button", "Checkbox", "ClassificationTag", "ContributionDonutChart", "DataTable", "Drawer", "EmptyState", "ErrorState", "Field", "HelpPopover", "Input", "LoadingState", "MetaTag", "Modal", "PageHeader", "PageTabs", "Select", "SingleSelect", "StatusBadge", "TableToolbar", "Textarea", "Toast", "Tooltip", "TrendAreaChart", "useAppDialog"];
   assert.deepEqual(Object.keys(UI).sort(), expected.sort());
 });
 
@@ -101,6 +101,118 @@ test("Select and help containers expose honest ARIA contracts", () => {
   assert.match(explicitHelp, /role="note"/);
 });
 
+test("control sizes keep the five-step contract and preserve compactTable", () => {
+  for (const size of ["table", "small", "compact", "medium", "large"]) {
+    const button = renderToStaticMarkup(React.createElement(UI.Button, { size }, "操作"));
+    const input = renderToStaticMarkup(React.createElement(UI.Input, { size, placeholder: "输入" }));
+    const select = renderToStaticMarkup(React.createElement(UI.Select, { ariaLabel: "筛选", options: [{ value: "a", label: "A" }], size, value: "a" }));
+    assert.match(button, new RegExp(`youpu-button[^\"]*is-${size}`));
+    assert.match(input, new RegExp(`youpu-input[^\"]*is-${size}`));
+    assert.match(select, new RegExp(`youpu-select[^\"]*is-${size}`));
+  }
+  const legacy = renderToStaticMarkup(React.createElement(UI.Select, { ariaLabel: "筛选", compactTable: true, options: [{ value: "a", label: "A" }], value: "a" }));
+  assert.match(legacy, /youpu-select is-table-compact/);
+  assert.match(renderToStaticMarkup(React.createElement(UI.Button, null, "操作")), /is-medium/);
+  assert.match(renderToStaticMarkup(React.createElement(UI.Input, null)), /is-medium/);
+  assert.match(renderToStaticMarkup(React.createElement(UI.Select, { ariaLabel: "筛选" })), /is-medium/);
+  assert.match(renderToStaticMarkup(React.createElement(UI.Button, { size: "typo" }, "操作")), /is-medium/);
+  assert.match(renderToStaticMarkup(React.createElement(UI.Input, { size: "typo" })), /is-medium/);
+  assert.match(renderToStaticMarkup(React.createElement(UI.Select, { ariaLabel: "筛选", size: "typo" })), /is-medium/);
+});
+
+test("control CSS maps every public size to a stable height", () => {
+  const css = read("../src/components.css");
+  for (const [name, height] of [["table", "28px"], ["small", "30px"], ["compact", "32px"], ["large", "42px"]]) {
+    assert.match(css, new RegExp(`\\.youpu-(?:button|input)\\.is-${name}[^}]*height:${height}`));
+    assert.match(css, new RegExp(`\\.youpu-select\\.is-${name}[^}]*min-height: ${height}`));
+  }
+  assert.match(css, /height:var\(--dv-control-height\)/);
+  assert.match(css, /youpu-select\.is-table[^}]*background: transparent/);
+  assert.match(css, /youpu-input-control[^}]*min-height:0/);
+});
+
+test("Textarea keeps native rows with invalid, size and resize contracts", () => {
+  const textarea = renderToStaticMarkup(React.createElement(UI.Textarea, {
+    "aria-describedby": "note-error",
+    invalid: true,
+    resize: "none",
+    rows: 5,
+    size: "compact",
+  }));
+  assert.match(textarea, /class="youpu-textarea is-compact is-resize-none is-invalid"/);
+  assert.match(textarea, /aria-describedby="note-error"/);
+  assert.match(textarea, /aria-invalid="true"/);
+  assert.match(textarea, /rows="5"/);
+  assert.match(renderToStaticMarkup(React.createElement(UI.Textarea, { resize: "unsupported", size: "unsupported" })), /is-medium is-resize-vertical/);
+});
+
+test("Textarea CSS owns the shared input states without resetting the host", () => {
+  const css = read("../src/components.css");
+  assert.match(css, /textarea\.youpu-textarea\{[^}]*min-height:82px[^}]*resize:vertical/);
+  assert.match(css, /textarea\.youpu-textarea\.is-invalid\{[^}]*var\(--dv-danger\)/);
+  assert.match(css, /textarea\.youpu-textarea\.is-resize-none\{resize:none\}/);
+  assert.match(css, /textarea\.youpu-textarea:disabled\{[^}]*opacity:.6/);
+  assert.match(css, /textarea\.youpu-textarea\{[^}]*border:1px solid var\(--dv-border\)[^}]*border-radius:var\(--dv-radius-control\)/);
+});
+
+test("Checkbox keeps native keyboard semantics, labels and mixed state", () => {
+  const labeled = renderToStaticMarkup(React.createElement(UI.Checkbox, { checked: true, id: "owner-check", indeterminate: true, onChange: () => {} }, "负责人"));
+  assert.match(labeled, /<label class="youpu-checkbox is-mixed" for="owner-check">/);
+  assert.match(labeled, /class="youpu-checkbox-control"/);
+  assert.match(labeled, /id="owner-check"/);
+  assert.match(labeled, /type="checkbox"/);
+  assert.match(labeled, /aria-checked="mixed"/);
+  assert.match(labeled, /checked/);
+  assert.match(labeled, /<span class="youpu-checkbox-label">负责人<\/span>/);
+  const bare = renderToStaticMarkup(React.createElement(UI.Checkbox, { "aria-label": "全选", disabled: true }));
+  assert.match(bare, /<span class="youpu-checkbox is-disabled"><input/);
+  assert.match(bare, /aria-label="全选"/);
+  assert.match(bare, /disabled/);
+  const locked = renderToStaticMarkup(React.createElement(UI.Checkbox, { "aria-checked": "false", indeterminate: true, type: "text" }));
+  assert.match(locked, /type="checkbox"/);
+  assert.match(locked, /aria-checked="mixed"/);
+  assert.doesNotMatch(locked, /type="text"/);
+  assert.doesNotMatch(locked, /aria-checked="false"/);
+});
+
+test("Checkbox CSS keeps the host control height from stretching the native box", () => {
+  const css = read("../src/components.css");
+  assert.match(css, /input\.youpu-checkbox-control\{[^}]*height:16px[^}]*min-height:16px[^}]*width:16px/);
+  assert.match(css, /youpu-checkbox\.is-disabled\{[^}]*opacity:.6/);
+  assert.match(css, /youpu-checkbox:focus-within\{[^}]*outline:2px solid var\(--dv-text-muted\)[^}]*outline-offset:2px/);
+});
+
+test("LoadingState table skeleton keeps rows, columns, density and legacy children", () => {
+  const table = renderToStaticMarkup(React.createElement(UI.LoadingState, { scope: "table", rows: 3, columns: 4, density: "compact" }));
+  assert.match(table, /data-scope="table"/);
+  assert.match(table, /aria-busy="true"/);
+  assert.match(table, /youpu-loading-skeleton is-compact/);
+  assert.match(table, /aria-label="正在加载"/);
+  assert.equal((table.match(/youpu-loading-row/g) || []).length, 3);
+  assert.equal((table.match(/youpu-loading-cell/g) || []).length, 12);
+  assert.match(table, /--youpu-loading-columns:4/);
+
+  const legacy = renderToStaticMarkup(React.createElement(UI.LoadingState, { scope: "table" }, "正在加载"));
+  assert.match(legacy, /正在加载/);
+  assert.doesNotMatch(legacy, /youpu-loading-skeleton/);
+
+  const bounded = renderToStaticMarkup(React.createElement(UI.LoadingState, { scope: "table", rows: 0, columns: 99, density: "unknown" }));
+  assert.match(bounded, /youpu-loading-skeleton is-standard/);
+  assert.equal((bounded.match(/youpu-loading-row/g) || []).length, 1);
+  assert.equal((bounded.match(/youpu-loading-cell/g) || []).length, 20);
+  assert.equal((renderToStaticMarkup(React.createElement(UI.LoadingState, { scope: "table", rows: 1.5, columns: "3foo" })).match(/youpu-loading-cell/g) || []).length, 24);
+  assert.equal((renderToStaticMarkup(React.createElement(UI.LoadingState, { scope: "table", rows: null, columns: "" })).match(/youpu-loading-cell/g) || []).length, 24);
+});
+
+test("LoadingState skeleton CSS has stable density heights and reduced-motion fallback", () => {
+  const css = read("../src/components.css");
+  assert.match(css, /youpu-loading-row[^}]*grid-template-columns: repeat\(var\(--youpu-loading-columns, 6\)/);
+  assert.match(css, /youpu-loading-skeleton\.is-compact[^}]*var\(--dv-table-row-height-compact\)/);
+  assert.match(css, /youpu-loading-skeleton\.is-product[^}]*var\(--dv-table-row-height-product\)/);
+  assert.match(css, /youpu-loading-cell[^}]*animation: youpu-loading-shimmer/);
+  assert.match(css, /prefers-reduced-motion: reduce\) \{ \.youpu-loading-cell \{ animation: none; \} \}/);
+});
+
 test("AppDialog uses unique IDs and only references a rendered description", () => {
   const dialog = read("../src/react/AppDialog.jsx");
   assert.match(dialog, /React\.useId\(\)/);
@@ -112,7 +224,7 @@ test("AppDialog uses unique IDs and only references a rendered description", () 
 test("tables and page states keep safe alignment and spacing defaults", () => {
   const css = read("../src/components.css");
   const design = read("../DESIGN.md");
-  assert.match(css, /\.youpu-data-table :is\(th, td\) \{[^}]*padding-block:[^}]*6px[^}]*padding-inline:[^}]*10px[^}]*vertical-align: middle/s);
+  assert.match(css, /\.youpu-data-table :is\(th, td\) \{[^}]*padding-block:[^}]*6px[^}]*padding-inline:[^}]*10px[^}]*text-align: center[^}]*vertical-align: middle/s);
   assert.match(css, /data-vertical-align="top"[^}]*vertical-align: top/);
   assert.match(css, /\.youpu-empty-state,[^}]*display: grid[^}]*align-content: center[^}]*justify-items: center[^}]*padding: var\(--youpu-state-padding, 24px\)/s);
   assert.match(css, /data-scope="inline"[^}]*justify-items: start[^}]*text-align: left/s);

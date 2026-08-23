@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.2.0 - 2026-08-23
+
+### 新增
+
+- **控件尺寸契约**：`Button`、`Input`、`Select` 统一支持 `table` 28px、`small` 30px、`compact` 32px、`medium` 36px、`large` 42px；`Select` 保留 `compactTable` 兼容入口。
+- **LoadingState 表格骨架**：支持 `rows`、`columns`、`density`、`ariaLabel`，稳定容器高度并在 reduced-motion 下关闭 shimmer。
+- **Textarea**：提供原生多行语义、`rows`、尺寸、校验态、resize 和描述关联。
+- **Checkbox**：提供受控/非受控、indeterminate、禁用、标签关联和混合态无障碍语义。
+- **DataTable 默认契约**：默认单元格居中、垂直居中、等宽数字和安全内边距。
+
+### 兼容
+
+- 未知尺寸回退到 `medium`；旧组件调用无需修改。
+- `LoadingState` 未传 `children` 时使用新骨架，旧 children 行为保留。
+
 ## 1.1.1
 
 ### 新增

@@ -5,6 +5,9 @@ function classNames(...names) {
   return names.filter(Boolean).join(" ");
 }
 
+const CONTROL_SIZES = new Set(["table", "small", "compact", "medium", "large"]);
+const resolveControlSize = (size) => CONTROL_SIZES.has(size) ? size : "medium";
+
 const FOCUSABLE_SELECTOR = 'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
 
 function useOverlayFocus(open, onClose, panelRef) {
@@ -77,6 +80,7 @@ export function Button({
 }) {
   const busyRef = React.useRef(false);
   const isDisabled = disabled || loading;
+  const controlSize = resolveControlSize(size);
 
   // 防重复提交：异步 onClick 未完成前忽略后续点击。
   // 这是接入方 design.md 明文要求、却在 443 处手写按钮里逐个复制的行为。
@@ -99,7 +103,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={classNames("youpu-button", `is-${variant}`, `is-${size}`, loading && "is-loading", className)}
+      className={classNames("youpu-button", `is-${variant}`, `is-${controlSize}`, loading && "is-loading", className)}
       disabled={isDisabled}
       aria-busy={loading || undefined}
       onClick={handleClick}
@@ -119,6 +123,7 @@ export function Input({
   className = "",
   ...props
 }) {
+  const controlSize = resolveControlSize(size);
   const control = (
     <input
       className={classNames("youpu-input-control", className)}
@@ -127,14 +132,73 @@ export function Input({
     />
   );
   if (!prefix && !suffix) {
-    return <span className={classNames("youpu-input", `is-${size}`, invalid && "is-invalid")}>{control}</span>;
+    return <span className={classNames("youpu-input", `is-${controlSize}`, invalid && "is-invalid")}>{control}</span>;
   }
   return (
-    <span className={classNames("youpu-input", `is-${size}`, invalid && "is-invalid", "has-affix")}>
+    <span className={classNames("youpu-input", `is-${controlSize}`, invalid && "is-invalid", "has-affix")}>
       {prefix ? <span className="youpu-input-affix">{prefix}</span> : null}
       {control}
       {suffix ? <span className="youpu-input-affix">{suffix}</span> : null}
     </span>
+  );
+}
+
+const TEXTAREA_RESIZES = new Set(["none", "vertical", "horizontal", "both"]);
+
+export function Textarea({
+  invalid = false,
+  rows = 3,
+  resize = "vertical",
+  size = "medium",
+  className = "",
+  ...props
+}) {
+  const controlSize = resolveControlSize(size);
+  const resizeMode = TEXTAREA_RESIZES.has(resize) ? resize : "vertical";
+  return (
+    <textarea
+      className={classNames("youpu-textarea", `is-${controlSize}`, `is-resize-${resizeMode}`, invalid && "is-invalid", className)}
+      aria-invalid={invalid || undefined}
+      rows={rows}
+      {...props}
+    />
+  );
+}
+
+export function Checkbox({
+  checked,
+  indeterminate = false,
+  disabled = false,
+  id,
+  className = "",
+  children,
+  ...props
+}) {
+  const generatedId = React.useId().replaceAll(":", "");
+  const inputId = id || `youpu-checkbox-${generatedId}`;
+  const inputRef = React.useRef(null);
+  React.useEffect(() => {
+    if (inputRef.current) inputRef.current.indeterminate = indeterminate;
+  }, [indeterminate]);
+  const input = (
+    <input
+      {...props}
+      ref={inputRef}
+      className="youpu-checkbox-control"
+      checked={checked}
+      disabled={disabled}
+      id={inputId}
+      type="checkbox"
+      aria-checked={indeterminate ? "mixed" : undefined}
+    />
+  );
+  return children ? (
+    <label className={classNames("youpu-checkbox", disabled && "is-disabled", indeterminate && "is-mixed", className)} htmlFor={inputId}>
+      {input}
+      <span className="youpu-checkbox-label">{children}</span>
+    </label>
+  ) : (
+    <span className={classNames("youpu-checkbox", disabled && "is-disabled", indeterminate && "is-mixed", className)}>{input}</span>
   );
 }
 
@@ -165,7 +229,7 @@ export function PageTabs({ className = "", ...props }) {
   return <nav className={classNames("youpu-page-tabs", className)} {...props} />;
 }
 
-export function Select({ ariaLabel, className = "", compactTable = false, contentWidth = false, disabled = false, menuMinWidth, onChange, options = [], placeholder = "请选择", value = "" }) {
+export function Select({ ariaLabel, className = "", compactTable = false, contentWidth = false, disabled = false, menuMinWidth, onChange, options = [], placeholder = "请选择", size = "medium", value = "" }) {
   const id = React.useId().replaceAll(":", "");
   const triggerRef = React.useRef(null);
   const menuRef = React.useRef(null);
@@ -276,7 +340,8 @@ export function Select({ ariaLabel, className = "", compactTable = false, conten
     </div>,
   ) : null;
 
-  return <div className={classNames("youpu-select", contentWidth && "is-content-width", compactTable && "is-table-compact", open && "is-open", disabled && "is-disabled", className)}>
+  const sizeClass = compactTable ? "" : `is-${resolveControlSize(size)}`;
+  return <div className={classNames("youpu-select", sizeClass, contentWidth && "is-content-width", compactTable && "is-table-compact", open && "is-open", disabled && "is-disabled", className)}>
     <button
       aria-activedescendant={open && activeIndex >= 0 ? `${id}-option-${activeIndex}` : undefined}
       aria-autocomplete="none"
@@ -387,19 +452,42 @@ export function HelpPopover({ as: Element = "aside", className = "", ...props })
 }
 
 function PageState({ as: Element = "div", className = "", scope = "section", ...props }) {
-  return <Element className={className} data-scope={scope} {...props} />;
+  return <Element {...props} className={className} data-scope={scope} />;
 }
 
-export function LoadingState({ className = "", ...props }) {
-  return <PageState className={classNames("youpu-loading-state", className)} role="status" aria-live="polite" {...props} />;
+const LOADING_DENSITIES = new Set(["compact", "standard", "product"]);
+const normalizeCount = (value, fallback) => {
+  if (value === null || value === "" || typeof value === "boolean") return fallback;
+  const count = Number(value);
+  return Number.isInteger(count) ? Math.max(1, Math.min(20, count)) : fallback;
+};
+
+export function LoadingState({ as: Element = "div", ariaLabel = "正在加载", className = "", columns, density = "standard", rows, scope = "section", children, ...props }) {
+  const resolvedDensity = LOADING_DENSITIES.has(density) ? density : "standard";
+  const resolvedRows = normalizeCount(rows, 4);
+  const resolvedColumns = normalizeCount(columns, 6);
+  const showTableSkeleton = scope === "table" && (rows !== undefined || columns !== undefined || children == null);
+  return (
+    <PageState as={Element} {...props} className={classNames("youpu-loading-state", className)} scope={scope} role="status" aria-live="polite" aria-busy="true" aria-label={showTableSkeleton ? (props["aria-label"] || ariaLabel) : props["aria-label"]}>
+      {showTableSkeleton ? (
+        <div className={classNames("youpu-loading-skeleton", `is-${resolvedDensity}`)} style={{ "--youpu-loading-columns": resolvedColumns }} aria-hidden="true">
+          {Array.from({ length: resolvedRows }, (_, rowIndex) => (
+            <div className="youpu-loading-row" key={rowIndex}>
+              {Array.from({ length: resolvedColumns }, (_, columnIndex) => <i className="youpu-loading-cell" key={columnIndex} />)}
+            </div>
+          ))}
+        </div>
+      ) : children}
+    </PageState>
+  );
 }
 
 export function EmptyState({ className = "", ...props }) {
-  return <PageState className={classNames("youpu-empty-state", className)} role="status" {...props} />;
+  return <PageState {...props} className={classNames("youpu-empty-state", className)} role="status" />;
 }
 
 export function ErrorState({ className = "", ...props }) {
-  return <PageState className={classNames("youpu-error-state", className)} role="alert" {...props} />;
+  return <PageState {...props} className={classNames("youpu-error-state", className)} role="alert" />;
 }
 
 export function Toast({ tone = "success", className = "", ...props }) {

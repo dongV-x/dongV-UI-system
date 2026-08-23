@@ -9,7 +9,7 @@
 | 项目 | 规则 |
 |---|---|
 | 页面标题 | 24px / 600 / 左对齐 |
-| 正常控件 | 36px 高 |
+| 控件尺寸 | table 28px / small 30px / compact 32px / medium 36px / large 42px |
 | 页签 | 42px 高 |
 | 面板圆角 | 12px |
 | 浮层圆角 | 14px |
@@ -61,6 +61,8 @@ flowchart TD
 
 - 所有交互可用键盘完成；焦点清晰可见。
 - `Select` 按非可编辑 combobox + listbox 契约暴露状态、当前选项和键盘导航。
+- `LoadingState` 的 `scope="table"` 可用 `rows`、`columns`、`density="compact|standard|product"` 输出稳定行骨架；短请求延迟和失败切换由请求编排负责，组件不启动隐式定时器。
+- 表格骨架默认按等宽列占位；带业务 `colgroup` 或非等宽列的真实表格暂不直接替换，需另行提供列布局契约后再接入。
 - Modal、Drawer、AppDialog 使用 dialog 语义、`aria-modal`、Escape 关闭、Tab 圈定和关闭后焦点归还；标题和描述 ID 必须唯一，空描述不建立无效引用。
 - Tooltip 只放非交互短说明。`HelpPopover` 只是样式容器，不默认冒充 tooltip；调用方必须自行提供 `role`、`id` 和触发器关系，含点击、复制或表单时改用 Modal 或 Drawer。
 - 遵循 `prefers-reduced-motion`，且只影响本包组件范围。

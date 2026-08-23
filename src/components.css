@@ -106,6 +106,7 @@
 .youpu-data-table :is(th, td) {
   padding-block: var(--youpu-data-table-cell-padding-block, 6px);
   padding-inline: var(--youpu-data-table-cell-padding-inline, 10px);
+  text-align: center;
   vertical-align: middle;
 }
 .youpu-data-table :is(th, td)[data-vertical-align="top"] { vertical-align: top; }
@@ -275,13 +276,28 @@
   min-height: var(--youpu-state-page-min-height, 360px);
   padding: var(--youpu-state-page-padding, 48px 24px);
 }
+.youpu-loading-skeleton { width: 100%; display: grid; gap: 1px; overflow: hidden; }
+.youpu-loading-row { display: grid; grid-template-columns: repeat(var(--youpu-loading-columns, 6), minmax(0, 1fr)); gap: 1px; min-height: var(--youpu-loading-row-height, var(--dv-table-row-height-standard)); }
+.youpu-loading-skeleton.is-compact { --youpu-loading-row-height: var(--dv-table-row-height-compact); }
+.youpu-loading-skeleton.is-product { --youpu-loading-row-height: var(--dv-table-row-height-product); }
+.youpu-loading-cell { display: block; min-width: 0; border-radius: 4px; background: linear-gradient(90deg, var(--dv-surface-soft), color-mix(in srgb, var(--dv-surface-soft) 58%, var(--dv-surface)), var(--dv-surface-soft)); background-size: 200% 100%; animation: youpu-loading-shimmer 1.3s linear infinite; }
+@keyframes youpu-loading-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .youpu-loading-cell { animation: none; } }
 .youpu-error-state { color: var(--danger, var(--dv-danger)); }
 .youpu-toast { z-index: var(--youpu-toast-z, 1500); }
 
 .youpu-select { min-width: 0; position: relative; }
 .youpu-select.is-content-width { width: fit-content; max-width: 100%; }
 .youpu-select.is-content-width .youpu-select-trigger { width: auto; min-width: max-content; max-width: 100%; justify-content: center; gap: 6px; padding-inline: 8px; }
+.youpu-select.is-small .youpu-select-trigger { min-height: 30px; }
+.youpu-select.is-compact .youpu-select-trigger { min-height: 32px; }
+.youpu-select.is-table .youpu-select-trigger { min-height: 28px; gap: 6px; padding-inline: 4px; border-color: transparent; border-radius: 6px; background: transparent; font-size: 12px; font-weight: 600; }
+.youpu-select.is-large .youpu-select-trigger { min-height: 42px; }
 .youpu-select.is-table-compact .youpu-select-trigger { min-height: 28px; gap: 6px; padding-inline: 4px; border-color: transparent; border-radius: 6px; background: transparent; font-size: 12px; font-weight: 600; }
+.youpu-select.is-table .youpu-select-trigger:hover:not(:disabled),
+.youpu-select.is-table.is-open .youpu-select-trigger { border-color: transparent; background: var(--surface-soft, var(--soft, var(--dv-surface-soft))); }
+.youpu-select.is-table .youpu-select-trigger:focus-visible { outline: none; }
+.youpu-select.is-table .youpu-select-chevron { margin-right: 1px; }
 .youpu-select.is-table-compact .youpu-select-trigger:hover:not(:disabled),
 .youpu-select.is-table-compact.is-open .youpu-select-trigger { border-color: transparent; background: var(--surface-soft, var(--soft, var(--dv-surface-soft))); }
 .youpu-select.is-table-compact .youpu-select-trigger:focus-visible { outline: none; }
@@ -570,6 +586,8 @@
    全部取用 token，不出现字面量尺寸与颜色，确保接入方换主题时自动跟随。 */
 .youpu-button{align-items:center;border:1px solid transparent;border-radius:var(--dv-radius-control);cursor:pointer;display:inline-flex;font:inherit;font-size:var(--dv-font-body-size);font-weight:600;gap:6px;height:var(--dv-control-height);justify-content:center;padding:0 14px;transition:background var(--dv-motion-fast) ease,border-color var(--dv-motion-fast) ease}
 .youpu-button.is-small{height:30px;font-size:12px;padding:0 10px}
+.youpu-button.is-compact{height:32px;padding:0 12px}
+.youpu-button.is-table{height:28px;font-size:12px;padding:0 8px}
 .youpu-button.is-large{height:42px;padding:0 18px}
 .youpu-button.is-primary{background:var(--dv-brand);border-color:var(--dv-brand);color:#fff}
 .youpu-button.is-primary:hover:not(:disabled){filter:brightness(.94)}
@@ -586,13 +604,34 @@
 
 .youpu-input{align-items:center;background:var(--dv-surface);border:1px solid var(--dv-border);border-radius:var(--dv-radius-control);display:inline-flex;gap:6px;height:var(--dv-control-height);min-width:0;padding:0 10px;width:100%}
 .youpu-input.is-small{height:30px}
+.youpu-input.is-compact{height:32px}
+.youpu-input.is-table{height:28px}
 .youpu-input.is-large{height:42px}
 .youpu-input:focus-within{border-color:var(--dv-border-strong)}
 .youpu-input.is-invalid{border-color:var(--dv-danger)}
-.youpu-input-control{background:transparent;border:0;color:var(--dv-text);flex:1;font:inherit;font-size:var(--dv-font-body-size);min-width:0;outline:0;width:100%}
+.youpu-input-control{background:transparent;border:0;color:var(--dv-text);flex:1;font:inherit;font-size:var(--dv-font-body-size);min-height:0;min-width:0;outline:0;width:100%}
 .youpu-input-control::placeholder{color:var(--dv-text-muted)}
 .youpu-input-control:disabled{cursor:not-allowed;opacity:.6}
 .youpu-input-affix{color:var(--dv-text-muted);flex:none;font-size:12px}
+
+textarea.youpu-textarea{display:block;width:100%;min-width:0;min-height:82px;padding:9px 10px;border:1px solid var(--dv-border);border-radius:var(--dv-radius-control);background:var(--dv-surface);color:var(--dv-text);font:inherit;font-size:var(--dv-font-body-size);line-height:1.55;outline:0;resize:vertical}
+textarea.youpu-textarea.is-table{padding-block:6px}
+textarea.youpu-textarea.is-small{padding-block:7px}
+textarea.youpu-textarea.is-compact{padding-block:8px}
+textarea.youpu-textarea.is-large{padding-block:11px}
+textarea.youpu-textarea:focus{border-color:var(--dv-border-strong)}
+textarea.youpu-textarea.is-invalid{border-color:var(--dv-danger)}
+textarea.youpu-textarea:disabled{cursor:not-allowed;opacity:.6}
+textarea.youpu-textarea.is-resize-none{resize:none}
+textarea.youpu-textarea.is-resize-horizontal{resize:horizontal}
+textarea.youpu-textarea.is-resize-both{resize:both}
+
+.youpu-checkbox{align-items:center;display:inline-flex;gap:7px;min-width:0;color:var(--dv-text);cursor:pointer;line-height:1.4}
+input.youpu-checkbox-control{accent-color:var(--dv-brand);appearance:auto;flex:0 0 auto;height:16px;min-height:16px;margin:0;width:16px}
+.youpu-checkbox-label{min-width:0}
+.youpu-checkbox.is-disabled{cursor:not-allowed;opacity:.6}
+.youpu-checkbox-control:disabled{cursor:not-allowed}
+.youpu-checkbox:focus-within{outline:2px solid var(--dv-text-muted);outline-offset:2px}
 
 .youpu-field{display:grid;gap:6px;min-width:0}
 .youpu-field-label{color:var(--dv-text);font-size:var(--dv-font-body-size);font-weight:600}

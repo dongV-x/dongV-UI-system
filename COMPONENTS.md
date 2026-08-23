@@ -2,12 +2,13 @@
 
 由 `npm run manifest` 从 `src/react/*.jsx` 生成。**新增组件前先查这里**，不要因为「没找到」就写原生标签。
 
-共 23 个导出组件。
+共 25 个导出组件。
 
 | 组件 | props | 说明 |
 |---|---|---|
 | **AppDialogProvider** | `children` |  |
 | **Button** | `variant`="secondary"、`size`="medium"、`loading`=false、`disabled`=false、`icon`、`type`="button"、`onClick`、`className`=""、`children` + 透传 |  |
+| **Checkbox** | `checked`、`indeterminate`=false、`disabled`=false、`id`、`className`=""、`children` + 透传 |  |
 | **ClassificationTag** | `as`="span"、`tone`="normal"、`icon`、`className`=""、`children` + 透传 |  |
 | **ContributionDonutChart** | `items`=[]、`centerLabel`="全部"、`formatValue`=defaultValue、`selectedKey`=""、`onSelect`、`className`=""、`footer`=null、`emptyMessage`="暂无构成数据" |  |
 | **DataTable** | `density`="standard"、`className`="" + 透传 |  |
@@ -17,15 +18,16 @@
 | **Field** | `label`、`required`=false、`error`、`hint`、`htmlFor`、`className`=""、`children` |  |
 | **HelpPopover** | `as`="aside"、`className`="" + 透传 |  |
 | **Input** | `invalid`=false、`size`="medium"、`prefix`、`suffix`、`className`="" + 透传 |  |
-| **LoadingState** | `className`="" + 透传 |  |
+| **LoadingState** | `as`="div"、`ariaLabel`="正在加载"、`className`=""、`columns`、`density`="standard"、`rows`、`scope`="section"、`children` + 透传 |  |
 | **MetaTag** | `tone`="neutral"、`className`="" + 透传 |  |
 | **Modal** | `open`=true、`onClose`、`title`、`ariaLabel`、`overlayClassName`=""、`className`=""、`width`、`closeLabel`="关闭"、`closeIcon`="×"、`portalTarget`、`children` |  |
 | **PageHeader** | `as`="header"、`className`="" + 透传 |  |
 | **PageTabs** | `className`="" + 透传 |  |
-| **Select** | `ariaLabel`、`className`=""、`compactTable`=false、`contentWidth`=false、`disabled`=false、`menuMinWidth`、`onChange`、`options`=[]、`placeholder`="请选择"、`value`="" |  |
+| **Select** | `ariaLabel`、`className`=""、`compactTable`=false、`contentWidth`=false、`disabled`=false、`menuMinWidth`、`onChange`、`options`=[]、`placeholder`="请选择"、`size`="medium"、`value`="" |  |
 | **SingleSelect** | `ariaLabel`、`className`=""、`disabled`=false、`id`、`onChange`、`options`、`value` |  |
 | **StatusBadge** | `tone`="neutral"、`className`="" + 透传 |  |
 | **TableToolbar** | `as`="div"、`className`="" + 透传 |  |
+| **Textarea** | `invalid`=false、`rows`=3、`resize`="vertical"、`size`="medium"、`className`="" + 透传 |  |
 | **Toast** | `tone`="success"、`className`="" + 透传 |  |
 | **Tooltip** | `as`="span"、`className`="" + 透传 |  |
 | **TrendAreaChart** | `series`=[]、`label`="趋势"、`axisStep`=1、`animate`=false、`valueKind`="number"、`showYAxis`=false、`className`=""、`emptyMessage`="当前没有可展示的趋势数据"、`portalTarget` |  |
