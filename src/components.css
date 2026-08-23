@@ -565,3 +565,37 @@
   .contribution-donut-chart { grid-template-columns: 1fr; gap: 10px; }
   .contribution-donut-row { grid-template-columns: minmax(135px, 1fr) minmax(70px, .8fr) 70px 48px; gap: 8px; }
 }
+
+/* ===== Button / Input / Field（1.1.0）=====
+   全部取用 token，不出现字面量尺寸与颜色，确保接入方换主题时自动跟随。 */
+.youpu-button{align-items:center;border:1px solid transparent;border-radius:var(--dv-radius-control);cursor:pointer;display:inline-flex;font:inherit;font-size:var(--dv-font-body-size);font-weight:600;gap:6px;height:var(--dv-control-height);justify-content:center;padding:0 14px;transition:background var(--dv-motion-fast) ease,border-color var(--dv-motion-fast) ease}
+.youpu-button.is-small{height:30px;font-size:12px;padding:0 10px}
+.youpu-button.is-large{height:42px;padding:0 18px}
+.youpu-button.is-primary{background:var(--dv-brand);border-color:var(--dv-brand);color:#fff}
+.youpu-button.is-primary:hover:not(:disabled){filter:brightness(.94)}
+.youpu-button.is-secondary{background:var(--dv-surface);border-color:var(--dv-border);color:var(--dv-text)}
+.youpu-button.is-secondary:hover:not(:disabled){background:var(--dv-surface-soft)}
+.youpu-button.is-ghost{background:transparent;border-color:transparent;color:var(--dv-text-muted)}
+.youpu-button.is-ghost:hover:not(:disabled){background:var(--dv-surface-soft);color:var(--dv-text)}
+.youpu-button.is-danger{background:var(--dv-danger);border-color:var(--dv-danger);color:#fff}
+.youpu-button:disabled{cursor:not-allowed;opacity:.55}
+.youpu-button.is-loading{cursor:progress}
+.youpu-button-spinner{animation:youpu-button-spin 720ms linear infinite;border:2px solid currentColor;border-radius:50%;border-right-color:transparent;height:13px;width:13px}
+@keyframes youpu-button-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.youpu-button-spinner{animation-duration:2s}}
+
+.youpu-input{align-items:center;background:var(--dv-surface);border:1px solid var(--dv-border);border-radius:var(--dv-radius-control);display:inline-flex;gap:6px;height:var(--dv-control-height);min-width:0;padding:0 10px;width:100%}
+.youpu-input.is-small{height:30px}
+.youpu-input.is-large{height:42px}
+.youpu-input:focus-within{border-color:var(--dv-border-strong)}
+.youpu-input.is-invalid{border-color:var(--dv-danger)}
+.youpu-input-control{background:transparent;border:0;color:var(--dv-text);flex:1;font:inherit;font-size:var(--dv-font-body-size);min-width:0;outline:0;width:100%}
+.youpu-input-control::placeholder{color:var(--dv-text-muted)}
+.youpu-input-control:disabled{cursor:not-allowed;opacity:.6}
+.youpu-input-affix{color:var(--dv-text-muted);flex:none;font-size:12px}
+
+.youpu-field{display:grid;gap:6px;min-width:0}
+.youpu-field-label{color:var(--dv-text);font-size:var(--dv-font-body-size);font-weight:600}
+.youpu-field-required{color:var(--dv-danger);margin-left:2px}
+.youpu-field-error{color:var(--dv-danger);font-size:12px;margin:0}
+.youpu-field-hint{color:var(--dv-text-muted);font-size:12px;margin:0}

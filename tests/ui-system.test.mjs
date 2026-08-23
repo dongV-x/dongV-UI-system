@@ -8,7 +8,7 @@ import * as UI from "../dist/index.js";
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
 test("public exports include the agreed reusable surface", () => {
-  const expected = ["AppDialogProvider", "ClassificationTag", "ContributionDonutChart", "DataTable", "Drawer", "EmptyState", "ErrorState", "HelpPopover", "LoadingState", "MetaTag", "Modal", "PageHeader", "PageTabs", "Select", "SingleSelect", "StatusBadge", "TableToolbar", "Toast", "Tooltip", "TrendAreaChart", "useAppDialog"];
+  const expected = ["AppDialogProvider", "Button", "ClassificationTag", "ContributionDonutChart", "DataTable", "Drawer", "EmptyState", "ErrorState", "Field", "HelpPopover", "Input", "LoadingState", "MetaTag", "Modal", "PageHeader", "PageTabs", "Select", "SingleSelect", "StatusBadge", "TableToolbar", "Toast", "Tooltip", "TrendAreaChart", "useAppDialog"];
   assert.deepEqual(Object.keys(UI).sort(), expected.sort());
 });
 
@@ -121,4 +121,50 @@ test("tables and page states keep safe alignment and spacing defaults", () => {
   assert.match(design, /表头和普通单元格默认横向 10px、纵向 6px/);
   assert.match(design, /inline.*table.*section.*page/s);
   assert.match(design, /标题、数值、状态或操作已经说清时不加重复副文案/);
+});
+
+
+test("Button 承载行为契约：loading 禁用并播报、异步 onClick 防重复提交", async () => {
+  const source = read("../src/react/YoupuUI.jsx");
+  // 契约必须在实现里，不能只是样式壳——DataTable 的教训是每页都要重写行为。
+  assert.match(source, /busyRef/, "Button 必须实现防重复提交");
+  assert.match(source, /aria-busy=\{loading \|\| undefined\}/, "loading 必须对辅助技术播报");
+  assert.match(source, /disabled=\{isDisabled\}/, "loading 期间必须真正禁用");
+
+  const html = renderToStaticMarkup(React.createElement(UI.Button, { loading: true }, "保存"));
+  assert.match(html, /aria-busy="true"/);
+  assert.match(html, /disabled/);
+  assert.match(html, /youpu-button-spinner/);
+
+  const plain = renderToStaticMarkup(React.createElement(UI.Button, { variant: "primary" }, "保存"));
+  assert.match(plain, /class="youpu-button is-primary is-medium"/);
+  assert.match(plain, /type="button"/, "默认 type=button，避免误触发表单提交");
+});
+
+test("Input 表达校验态，Field 关联 label 与错误信息", () => {
+  const invalid = renderToStaticMarkup(React.createElement(UI.Input, { invalid: true, placeholder: "金额" }));
+  assert.match(invalid, /aria-invalid="true"/);
+  assert.match(invalid, /is-invalid/);
+
+  const field = renderToStaticMarkup(
+    React.createElement(UI.Field, { label: "店铺", required: true, error: "请选择店铺" },
+      (bind) => React.createElement("input", { ...bind })),
+  );
+  assert.match(field, /<label[^>]*for="([^"]+)"/, "label 必须绑定控件");
+  const id = field.match(/<label[^>]*for="([^"]+)"/)[1];
+  assert.ok(field.includes(`id="${id}"`), "控件 id 必须与 label 的 for 一致");
+  assert.match(field, /role="alert"/, "错误信息必须即时播报");
+  assert.match(field, /aria-describedby="[^"]*-error"/);
+  assert.match(field, /aria-label="必填"/);
+});
+
+test("三个原子的样式只取用 token，不写死尺寸与颜色", () => {
+  const css = read("../src/components.css");
+  const block = css.slice(css.indexOf(".youpu-button{"));
+  assert.match(block, /height:var\(--dv-control-height\)/);
+  assert.match(block, /border-radius:var\(--dv-radius-control\)/);
+  assert.match(block, /background:var\(--dv-brand\)/);
+  // 允许 #fff（品牌底上的前景色）与少量档位尺寸，但禁止其它写死色值
+  const hex = [...block.matchAll(/#[0-9a-fA-F]{3,6}/g)].map((m) => m[0].toLowerCase());
+  assert.deepEqual([...new Set(hex)], ["#fff"], "除品牌底上的白字外不得出现写死色值");
 });

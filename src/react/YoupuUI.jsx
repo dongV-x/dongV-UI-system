@@ -58,6 +58,105 @@ function renderOverlay(content, portalTarget) {
   return target ? createPortal(content, target) : content;
 }
 
+/* Button / Input / Field 三个原子（1.1.0 新增）。
+   加入原因：接入方实测有 436 处原生 <button>、67 处 <input> 无组件可用，
+   规则再多也无处可落。这三个必须带行为契约，不能只是 className 壳——
+   DataTable 那种「三行样式壳」的教训是：每个页面仍要自己重写行为，抽象等于没做。 */
+
+export function Button({
+  variant = "secondary",
+  size = "medium",
+  loading = false,
+  disabled = false,
+  icon,
+  type = "button",
+  onClick,
+  className = "",
+  children,
+  ...props
+}) {
+  const busyRef = React.useRef(false);
+  const isDisabled = disabled || loading;
+
+  // 防重复提交：异步 onClick 未完成前忽略后续点击。
+  // 这是接入方 design.md 明文要求、却在 443 处手写按钮里逐个复制的行为。
+  const handleClick = React.useCallback(async (event) => {
+    if (isDisabled || busyRef.current) {
+      event.preventDefault();
+      return;
+    }
+    const result = onClick?.(event);
+    if (result && typeof result.then === "function") {
+      busyRef.current = true;
+      try {
+        await result;
+      } finally {
+        busyRef.current = false;
+      }
+    }
+  }, [isDisabled, onClick]);
+
+  return (
+    <button
+      type={type}
+      className={classNames("youpu-button", `is-${variant}`, `is-${size}`, loading && "is-loading", className)}
+      disabled={isDisabled}
+      aria-busy={loading || undefined}
+      onClick={handleClick}
+      {...props}
+    >
+      {loading ? <span className="youpu-button-spinner" aria-hidden="true" /> : icon}
+      {children}
+    </button>
+  );
+}
+
+export function Input({
+  invalid = false,
+  size = "medium",
+  prefix,
+  suffix,
+  className = "",
+  ...props
+}) {
+  const control = (
+    <input
+      className={classNames("youpu-input-control", className)}
+      aria-invalid={invalid || undefined}
+      {...props}
+    />
+  );
+  if (!prefix && !suffix) {
+    return <span className={classNames("youpu-input", `is-${size}`, invalid && "is-invalid")}>{control}</span>;
+  }
+  return (
+    <span className={classNames("youpu-input", `is-${size}`, invalid && "is-invalid", "has-affix")}>
+      {prefix ? <span className="youpu-input-affix">{prefix}</span> : null}
+      {control}
+      {suffix ? <span className="youpu-input-affix">{suffix}</span> : null}
+    </span>
+  );
+}
+
+export function Field({ label, required = false, error, hint, htmlFor, className = "", children }) {
+  const reactId = React.useId();
+  const controlId = htmlFor || `youpu-field-${reactId}`;
+  const errorId = error ? `${controlId}-error` : undefined;
+  return (
+    <div className={classNames("youpu-field", error && "is-invalid", className)}>
+      {label ? (
+        <label className="youpu-field-label" htmlFor={controlId}>
+          {label}
+          {required ? <b className="youpu-field-required" aria-label="必填">*</b> : null}
+        </label>
+      ) : null}
+      {typeof children === "function" ? children({ id: controlId, "aria-describedby": errorId, "aria-invalid": Boolean(error) || undefined }) : children}
+      {error ? <p className="youpu-field-error" id={errorId} role="alert">{error}</p> : null}
+      {!error && hint ? <p className="youpu-field-hint">{hint}</p> : null}
+    </div>
+  );
+}
+
 export function PageHeader({ as: Element = "header", className = "", ...props }) {
   return <Element className={classNames("youpu-page-header", className)} {...props} />;
 }

@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0
+
+### 新增
+
+- `Button`：variant（primary/secondary/ghost/danger）、size、loading、icon。**带行为契约**——loading 期间真正 `disabled` 并 `aria-busy` 播报；`onClick` 返回 Promise 时自动防重复提交；默认 `type="button"` 避免误触发表单提交。
+- `Input`：invalid 校验态（`aria-invalid`）、size、prefix/suffix 装饰位。
+- `Field`：label 与控件通过 `useId` 自动关联；`error` 以 `role="alert"` 播报并接 `aria-describedby`；required 星号带 `aria-label`。支持 children 为函数以接收绑定属性。
+
+### 为什么加这三个
+
+接入方实测存在 436 处原生 `<button>`、67 处 `<input>`——不是不守规范，是这三类高频原子此前根本没有组件可用，规则无处落地。三者均以行为契约为主、样式为辅，避免重蹈只有 className 的样式壳（那样每个页面仍要重写行为，抽象等于没做）。
+
 ## 1.0.4 - 2026-08-12
 
 - 为公共 DataTable 补充默认横纵安全间距和单行垂直居中，多行内容可显式顶部对齐。

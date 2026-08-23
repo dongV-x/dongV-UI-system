@@ -64,3 +64,13 @@ flowchart TD
 - Modal、Drawer、AppDialog 使用 dialog 语义、`aria-modal`、Escape 关闭、Tab 圈定和关闭后焦点归还；标题和描述 ID 必须唯一，空描述不建立无效引用。
 - Tooltip 只放非交互短说明。`HelpPopover` 只是样式容器，不默认冒充 tooltip；调用方必须自行提供 `role`、`id` 和触发器关系，含点击、复制或表单时改用 Modal 或 Drawer。
 - 遵循 `prefers-reduced-motion`，且只影响本包组件范围。
+
+## 基础原子（1.1.0）
+
+| 组件 | 用途 | 行为契约（非样式，必须依赖） |
+|---|---|---|
+| `Button` | 所有可点击动作 | loading 时禁用 + `aria-busy`；异步 onClick 防重复提交；默认 `type="button"` |
+| `Input` | 单行输入 | `invalid` 映射 `aria-invalid`；prefix/suffix 不侵入输入区 |
+| `Field` | label + 控件 + 错误/提示 | label 自动关联控件 id；error 走 `role="alert"` 与 `aria-describedby` |
+
+**不要为了改一处样式而绕开这三个组件**：需要新变体时在此新增 variant，不要在业务侧写原生标签加 class——那正是接入方出现 436 处原生 `<button>` 的原因。
