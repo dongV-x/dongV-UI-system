@@ -168,3 +168,22 @@ test("三个原子的样式只取用 token，不写死尺寸与颜色", () => {
   const hex = [...block.matchAll(/#[0-9a-fA-F]{3,6}/g)].map((m) => m[0].toLowerCase());
   assert.deepEqual([...new Set(hex)], ["#fff"], "除品牌底上的白字外不得出现写死色值");
 });
+
+test("组件清单与源码同步：新增/删除组件必须重新生成清单", () => {
+  // 清单腐化是设计系统的典型死法——文档说有 A 组件，实际早改名了，
+  // AI 照着写就一定错。这条门禁保证 COMPONENTS.md 永远等于 src/react 的真实导出。
+  const manifest = JSON.parse(read("../components.json"));
+  const manifestNames = manifest.components.map((c) => c.name).sort();
+  const exportNames = Object.keys(UI).filter((k) => /^[A-Z]/.test(k)).sort();
+  assert.deepEqual(
+    manifestNames.filter((n) => exportNames.includes(n)),
+    exportNames,
+    "components.json 与实际导出不一致，请运行 npm run manifest",
+  );
+  assert.equal(manifest.version, JSON.parse(read("../package.json")).version, "清单版本落后，请运行 npm run manifest");
+
+  const md = read("../COMPONENTS.md");
+  for (const name of exportNames) {
+    assert.ok(md.includes(`**${name}**`), `COMPONENTS.md 缺少 ${name}`);
+  }
+});

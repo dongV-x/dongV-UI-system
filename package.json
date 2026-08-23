@@ -1,6 +1,6 @@
 {
   "name": "dongv-ui-system",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Reusable desktop operations UI tokens, CSS and React components from dongV.",
   "type": "module",
   "license": "MIT",
@@ -17,7 +17,9 @@
     "PAGE-TEMPLATES.md",
     "MIGRATION.md",
     "SOURCE.md",
-    "LICENSE"
+    "LICENSE",
+    "COMPONENTS.md",
+    "components.json"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -38,7 +40,8 @@
     "build": "npm run build:lib && npm run build:example",
     "test": "npm run build:lib && node --test tests/*.test.mjs",
     "scan": "node scripts/check.mjs",
-    "check": "npm run tokens:check && npm test && npm run build:example && npm run scan && npm pack --dry-run"
+    "check": "npm run tokens:check && npm run manifest && npm test && npm run build:example && npm run scan && npm pack --dry-run",
+    "manifest": "node scripts/generate-manifest.mjs"
   },
   "peerDependencies": {
     "react": ">=18.2.0 <20",

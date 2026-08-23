@@ -1,0 +1,589 @@
+{
+  "version": "1.1.1",
+  "components": [
+    {
+      "name": "AppDialogProvider",
+      "file": "src/react/AppDialog.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "children",
+          "default": null
+        }
+      ],
+      "rest": false
+    },
+    {
+      "name": "Button",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "variant",
+          "default": "\"secondary\""
+        },
+        {
+          "name": "size",
+          "default": "\"medium\""
+        },
+        {
+          "name": "loading",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "default": "false"
+        },
+        {
+          "name": "icon",
+          "default": null
+        },
+        {
+          "name": "type",
+          "default": "\"button\""
+        },
+        {
+          "name": "onClick",
+          "default": null
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "children",
+          "default": null
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "ClassificationTag",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "as",
+          "default": "\"span\""
+        },
+        {
+          "name": "tone",
+          "default": "\"normal\""
+        },
+        {
+          "name": "icon",
+          "default": null
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "children",
+          "default": null
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "ContributionDonutChart",
+      "file": "src/react/ContributionDonutChart.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "items",
+          "default": "[]"
+        },
+        {
+          "name": "centerLabel",
+          "default": "\"全部\""
+        },
+        {
+          "name": "formatValue",
+          "default": "defaultValue"
+        },
+        {
+          "name": "selectedKey",
+          "default": "\"\""
+        },
+        {
+          "name": "onSelect",
+          "default": null
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "footer",
+          "default": "null"
+        },
+        {
+          "name": "emptyMessage",
+          "default": "\"暂无构成数据\""
+        }
+      ],
+      "rest": false
+    },
+    {
+      "name": "DataTable",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "density",
+          "default": "\"standard\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "Drawer",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "open",
+          "default": "true"
+        },
+        {
+          "name": "onClose",
+          "default": null
+        },
+        {
+          "name": "ariaLabel",
+          "default": null
+        },
+        {
+          "name": "ariaLabelledby",
+          "default": null
+        },
+        {
+          "name": "overlayClassName",
+          "default": "\"\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "portalTarget",
+          "default": null
+        },
+        {
+          "name": "children",
+          "default": null
+        }
+      ],
+      "rest": false
+    },
+    {
+      "name": "EmptyState",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "ErrorState",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "Field",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "label",
+          "default": null
+        },
+        {
+          "name": "required",
+          "default": "false"
+        },
+        {
+          "name": "error",
+          "default": null
+        },
+        {
+          "name": "hint",
+          "default": null
+        },
+        {
+          "name": "htmlFor",
+          "default": null
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "children",
+          "default": null
+        }
+      ],
+      "rest": false
+    },
+    {
+      "name": "HelpPopover",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "as",
+          "default": "\"aside\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "Input",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "invalid",
+          "default": "false"
+        },
+        {
+          "name": "size",
+          "default": "\"medium\""
+        },
+        {
+          "name": "prefix",
+          "default": null
+        },
+        {
+          "name": "suffix",
+          "default": null
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "LoadingState",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "MetaTag",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "tone",
+          "default": "\"neutral\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "Modal",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "open",
+          "default": "true"
+        },
+        {
+          "name": "onClose",
+          "default": null
+        },
+        {
+          "name": "title",
+          "default": null
+        },
+        {
+          "name": "ariaLabel",
+          "default": null
+        },
+        {
+          "name": "overlayClassName",
+          "default": "\"\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "width",
+          "default": null
+        },
+        {
+          "name": "closeLabel",
+          "default": "\"关闭\""
+        },
+        {
+          "name": "closeIcon",
+          "default": "\"×\""
+        },
+        {
+          "name": "portalTarget",
+          "default": null
+        },
+        {
+          "name": "children",
+          "default": null
+        }
+      ],
+      "rest": false
+    },
+    {
+      "name": "PageHeader",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "as",
+          "default": "\"header\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "PageTabs",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "Select",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "default": null
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "compactTable",
+          "default": "false"
+        },
+        {
+          "name": "contentWidth",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "default": "false"
+        },
+        {
+          "name": "menuMinWidth",
+          "default": null
+        },
+        {
+          "name": "onChange",
+          "default": null
+        },
+        {
+          "name": "options",
+          "default": "[]"
+        },
+        {
+          "name": "placeholder",
+          "default": "\"请选择\""
+        },
+        {
+          "name": "value",
+          "default": "\"\""
+        }
+      ],
+      "rest": false
+    },
+    {
+      "name": "SingleSelect",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "default": null
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "disabled",
+          "default": "false"
+        },
+        {
+          "name": "id",
+          "default": null
+        },
+        {
+          "name": "onChange",
+          "default": null
+        },
+        {
+          "name": "options",
+          "default": null
+        },
+        {
+          "name": "value",
+          "default": null
+        }
+      ],
+      "rest": false
+    },
+    {
+      "name": "StatusBadge",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "tone",
+          "default": "\"neutral\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "TableToolbar",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "as",
+          "default": "\"div\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "Toast",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "tone",
+          "default": "\"success\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "Tooltip",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "as",
+          "default": "\"span\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "TrendAreaChart",
+      "file": "src/react/TrendAreaChart.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "series",
+          "default": "[]"
+        },
+        {
+          "name": "label",
+          "default": "\"趋势\""
+        },
+        {
+          "name": "axisStep",
+          "default": "1"
+        },
+        {
+          "name": "animate",
+          "default": "false"
+        },
+        {
+          "name": "valueKind",
+          "default": "\"number\""
+        },
+        {
+          "name": "showYAxis",
+          "default": "false"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "emptyMessage",
+          "default": "\"当前没有可展示的趋势数据\""
+        },
+        {
+          "name": "portalTarget",
+          "default": null
+        }
+      ],
+      "rest": false
+    }
+  ]
+}
