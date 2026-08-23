@@ -4,7 +4,7 @@
 
 ### 新增
 
-- **机器可读组件清单**：（人读）+ （机读），由 `npm run manifest` 从 `src/react/*.jsx` 自动生成并随包发布。
+- **机器可读组件清单**：`COMPONENTS.md`（人读）+ `components.json`（机读），由 `npm run manifest` 从 `src/react/*.jsx` 自动生成并随包发布。
 - 新增门禁「组件清单与源码同步」：清单与实际导出不一致或版本落后即测试失败。
 
 ### 为什么
