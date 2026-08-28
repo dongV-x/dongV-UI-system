@@ -18,16 +18,16 @@
 
 ## 普通使用者
 
-从 GitHub Release 下载 `dongv-ui-system-1.2.1.tgz`，然后安装：
+从 GitHub Release 下载 `dongv-ui-system-1.2.2.tgz`，然后安装：
 
 ```bash
-npm install ./dongv-ui-system-1.2.1.tgz
+npm install ./dongv-ui-system-1.2.2.tgz
 ```
 
 也可直接安装公开 Release：
 
 ```bash
-npm install https://github.com/dongV-x/dongV-UI-system/releases/download/v1.2.1/dongv-ui-system-1.2.1.tgz
+npm install https://github.com/dongV-x/dongV-UI-system/releases/download/v1.2.2/dongv-ui-system-1.2.2.tgz
 ```
 
 ## React 项目

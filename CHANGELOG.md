@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.2 - 2026-08-28
+
+### 修复
+
+- 移除错误的自依赖和误生成的运行时依赖，避免 GitHub Actions 在 `npm ci` 时从 npm registry 下载不存在的 `dongv-ui-system`。
+
 ## 1.2.1 - 2026-08-28
 
 ### 新增
