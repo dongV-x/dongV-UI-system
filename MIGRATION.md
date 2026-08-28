@@ -47,6 +47,12 @@ flowchart TD
 - `LoadingState scope="table"` 可用 `rows`、`columns` 和 `density` 输出稳定骨架；短请求延迟由请求编排负责，不要在组件内新增隐式定时器。
 - 升级后运行接入项目的测试、生产构建和代表页面视觉验收；不要直接批量替换已验收的业务页面。
 
+## HelpTip 规则解释
+
+- 需要标题和完整规则说明的入口使用 `HelpTip`；原页面已有问号时使用默认问号，原页面只有文字入口时传 `trigger` 沿用该文字，不新增问号占位。页面不再维护悬停、关闭、Portal 定位和层级 CSS。
+- 截断文字、图表数值、拖动方式等一句话轻提示继续使用 `Tooltip`，不要升级成带标题的说明浮窗。
+- `width="standard"` 默认 360px；只有公式或多段规则使用 `width="wide"` 的 420px。
+
 ## 控件尺寸
 
 - `Button`、`Input`、`Select` 统一支持 `table=28px`、`small=30px`、`compact=32px`、`medium=36px`、`large=42px`；省略 `size` 或传入未知值均回退到 `medium`。

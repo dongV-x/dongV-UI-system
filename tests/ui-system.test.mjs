@@ -8,7 +8,7 @@ import * as UI from "../dist/index.js";
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
 test("public exports include the agreed reusable surface", () => {
-  const expected = ["AppDialogProvider", "Button", "Checkbox", "ClassificationTag", "ContributionDonutChart", "DataTable", "Drawer", "EmptyState", "ErrorState", "Field", "HelpPopover", "Input", "LoadingState", "MetaTag", "Modal", "PageHeader", "PageTabs", "Select", "SingleSelect", "StatusBadge", "TableToolbar", "Textarea", "Toast", "Tooltip", "TrendAreaChart", "useAppDialog"];
+  const expected = ["AppDialogProvider", "Button", "Checkbox", "ClassificationTag", "ContributionDonutChart", "DataTable", "Drawer", "EmptyState", "ErrorState", "Field", "HelpPopover", "HelpTip", "Input", "LoadingState", "MetaTag", "Modal", "PageHeader", "PageTabs", "Select", "SingleSelect", "StatusBadge", "TableToolbar", "Textarea", "Toast", "Tooltip", "TrendAreaChart", "useAppDialog"];
   assert.deepEqual(Object.keys(UI).sort(), expected.sort());
 });
 
@@ -99,6 +99,24 @@ test("Select and help containers expose honest ARIA contracts", () => {
   assert.match(read("../src/react/YoupuUI.jsx"), /if \(next >= 0\) setActiveIndex\(next\)/);
   assert.doesNotMatch(help, /role="tooltip"/);
   assert.match(explicitHelp, /role="note"/);
+});
+
+test("HelpTip owns question-mark and existing-label explanation triggers", () => {
+  const markup = renderToStaticMarkup(React.createElement(UI.HelpTip, { title: "计算口径", portalTarget: null }, "解释正文"));
+  const labelMarkup = renderToStaticMarkup(React.createElement(UI.HelpTip, { title: "计算口径", trigger: "预估利润率", portalTarget: null }, "解释正文"));
+  const source = read("../src/react/YoupuUI.jsx");
+  const css = read("../src/components.css");
+  assert.match(markup, /youpu-help-tip-trigger/);
+  assert.match(markup, /aria-label="查看计算口径"/);
+  assert.match(labelMarkup, /has-custom-trigger/);
+  assert.match(labelMarkup, />预估利润率<\/button>/);
+  assert.doesNotMatch(labelMarkup, />\?<\/button>/);
+  assert.match(source, /onMouseEnter=\{cancelClose\}/);
+  assert.match(source, /onMouseLeave=\{closeSoon\}/);
+  assert.match(source, /document\.addEventListener\("pointerdown", closeOutside\)/);
+  assert.match(source, /window\.addEventListener\("keydown", closeOnEscape\)/);
+  assert.match(css, /\.youpu-help-tip-panel \{[^}]*position: fixed[^}]*--yp-layer-system[^}]*user-select: text/s);
+  assert.match(css, /\.youpu-help-tip-title \{[^}]*background: var\(--dv-danger-soft\)/s);
 });
 
 test("control sizes keep the five-step contract and preserve compactTable", () => {

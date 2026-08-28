@@ -2,7 +2,7 @@
 
 由 `npm run manifest` 从 `src/react/*.jsx` 生成。**新增组件前先查这里**，不要因为「没找到」就写原生标签。
 
-共 25 个导出组件。
+共 26 个导出组件。
 
 | 组件 | props | 说明 |
 |---|---|---|
@@ -17,6 +17,7 @@
 | **ErrorState** | `className`="" + 透传 |  |
 | **Field** | `label`、`required`=false、`error`、`hint`、`htmlFor`、`className`=""、`children` |  |
 | **HelpPopover** | `as`="aside"、`className`="" + 透传 |  |
+| **HelpTip** | `title`、`ariaLabel`、`trigger`、`width`="standard"、`className`=""、`portalTarget`、`children` | 规则解释浮窗：默认问号，也可沿用页面已有文字作为触发区。 |
 | **Input** | `invalid`=false、`size`="medium"、`prefix`、`suffix`、`className`="" + 透传 |  |
 | **LoadingState** | `as`="div"、`ariaLabel`="正在加载"、`className`=""、`columns`、`density`="standard"、`rows`、`scope`="section"、`children` + 透传 |  |
 | **MetaTag** | `tone`="neutral"、`className`="" + 透传 |  |

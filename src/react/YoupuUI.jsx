@@ -451,6 +451,81 @@ export function HelpPopover({ as: Element = "aside", className = "", ...props })
   return <Element className={classNames("youpu-help-popover", className)} {...props} />;
 }
 
+/** 规则解释浮窗：默认问号，也可沿用页面已有文字作为触发区。 */
+export function HelpTip({ title, ariaLabel, trigger, width = "standard", className = "", portalTarget, children }) {
+  const id = React.useId().replaceAll(":", "");
+  const rootRef = React.useRef(null);
+  const triggerRef = React.useRef(null);
+  const popoverRef = React.useRef(null);
+  const closeTimerRef = React.useRef(null);
+  const [open, setOpen] = React.useState(false);
+  const [position, setPosition] = React.useState(null);
+  const wide = width === "wide";
+  const cancelClose = React.useCallback(() => {
+    if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = null;
+  }, []);
+  const updatePosition = React.useCallback(() => {
+    const rect = triggerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const panelWidth = Math.min(wide ? 420 : 360, window.innerWidth - 32);
+    const panelHeight = popoverRef.current?.getBoundingClientRect().height || 220;
+    const below = rect.bottom + 8;
+    const top = below + panelHeight <= window.innerHeight - 16 || rect.top < panelHeight + 24 ? below : rect.top - panelHeight - 8;
+    setPosition({ top: Math.max(16, top), left: Math.min(Math.max(16, rect.left), Math.max(16, window.innerWidth - panelWidth - 16)) });
+  }, [wide]);
+  const show = React.useCallback(() => {
+    cancelClose();
+    updatePosition();
+    setOpen(true);
+  }, [cancelClose, updatePosition]);
+  const closeSoon = React.useCallback(() => {
+    cancelClose();
+    closeTimerRef.current = window.setTimeout(() => setOpen(false), 160);
+  }, [cancelClose]);
+  React.useEffect(() => {
+    if (!open) return undefined;
+    const frame = window.requestAnimationFrame(updatePosition);
+    const closeOutside = (event) => {
+      if (!rootRef.current?.contains(event.target) && !popoverRef.current?.contains(event.target)) setOpen(false);
+    };
+    const closeOnEscape = (event) => { if (event.key === "Escape") setOpen(false); };
+    document.addEventListener("pointerdown", closeOutside);
+    window.addEventListener("keydown", closeOnEscape);
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      document.removeEventListener("pointerdown", closeOutside);
+      window.removeEventListener("keydown", closeOnEscape);
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [open, updatePosition]);
+  React.useEffect(() => () => cancelClose(), [cancelClose]);
+  const popover = open && position ? renderOverlay(
+    <aside
+      aria-labelledby={`${id}-title`}
+      className={classNames("youpu-help-tip-panel", wide && "is-wide")}
+      id={`${id}-content`}
+      onMouseEnter={cancelClose}
+      onMouseLeave={closeSoon}
+      ref={popoverRef}
+      role="tooltip"
+      style={position}
+    >
+      <strong className="youpu-help-tip-title" id={`${id}-title`}>{title}</strong>
+      <div className="youpu-help-tip-body">{children}</div>
+    </aside>,
+    portalTarget,
+  ) : null;
+  const hasCustomTrigger = trigger !== undefined;
+  return <span className={classNames("youpu-help-tip", open && "is-open", className)} onFocus={show} onMouseEnter={show} onMouseLeave={closeSoon} ref={rootRef}>
+    <button aria-describedby={open ? `${id}-content` : undefined} aria-expanded={open} aria-label={ariaLabel || `查看${title}`} className={classNames("youpu-help-tip-trigger", hasCustomTrigger && "has-custom-trigger")} onBlur={closeSoon} onClick={show} ref={triggerRef} type="button">{hasCustomTrigger ? trigger : "?"}</button>
+    {popover}
+  </span>;
+}
+
 function PageState({ as: Element = "div", className = "", scope = "section", ...props }) {
   return <Element {...props} className={className} data-scope={scope} />;
 }

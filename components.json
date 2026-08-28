@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.1",
   "components": [
     {
       "name": "AppDialogProvider",
@@ -288,6 +288,42 @@
         }
       ],
       "rest": true
+    },
+    {
+      "name": "HelpTip",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "规则解释浮窗：默认问号，也可沿用页面已有文字作为触发区。",
+      "props": [
+        {
+          "name": "title",
+          "default": null
+        },
+        {
+          "name": "ariaLabel",
+          "default": null
+        },
+        {
+          "name": "trigger",
+          "default": null
+        },
+        {
+          "name": "width",
+          "default": "\"standard\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "portalTarget",
+          "default": null
+        },
+        {
+          "name": "children",
+          "default": null
+        }
+      ],
+      "rest": false
     },
     {
       "name": "Input",

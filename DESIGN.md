@@ -64,7 +64,7 @@ flowchart TD
 - `LoadingState` 的 `scope="table"` 可用 `rows`、`columns`、`density="compact|standard|product"` 输出稳定行骨架；短请求延迟和失败切换由请求编排负责，组件不启动隐式定时器。
 - 表格骨架默认按等宽列占位；带业务 `colgroup` 或非等宽列的真实表格暂不直接替换，需另行提供列布局契约后再接入。
 - Modal、Drawer、AppDialog 使用 dialog 语义、`aria-modal`、Escape 关闭、Tab 圈定和关闭后焦点归还；标题和描述 ID 必须唯一，空描述不建立无效引用。
-- Tooltip 只放非交互短说明。`HelpPopover` 只是样式容器，不默认冒充 tooltip；调用方必须自行提供 `role`、`id` 和触发器关系，含点击、复制或表单时改用 Modal 或 Drawer。
+- Tooltip 只放非交互短说明，例如截断文字、图表数值和轻量操作提示。需要标题、规则或计算口径的解释统一使用 `HelpTip`：原页面已有问号时使用默认问号，原页面只有文字入口时通过 `trigger` 沿用该文字，不为统一强加问号。浮窗悬停或聚焦显示，正文可停留选择，离开或点击外部关闭，并使用系统最高浮层。`HelpPopover` 只保留为旧页面样式容器；包含表单或执行动作时仍使用 Modal 或 Drawer。
 - 遵循 `prefers-reduced-motion`，且只影响本包组件范围。
 
 ## 基础原子（1.1.0）

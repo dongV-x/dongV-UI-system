@@ -250,6 +250,20 @@
 }
 .youpu-tooltip,
 .youpu-help-popover { z-index: var(--youpu-popover-z, 1200); }
+.youpu-help-tip { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; }
+.youpu-help-tip-trigger { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; padding: 0; border: 1px solid var(--dv-border-strong); border-radius: 50%; background: transparent; color: var(--dv-text-muted); cursor: help; font: inherit; font-size: 11px; font-weight: 650; line-height: 1; }
+.youpu-help-tip-trigger:hover,
+.youpu-help-tip.is-open .youpu-help-tip-trigger { border-color: var(--dv-danger); color: var(--dv-danger); }
+.youpu-help-tip-trigger.has-custom-trigger { width: auto; height: auto; padding: 0; border: 0; border-radius: 0; color: inherit; font-size: inherit; font-weight: inherit; line-height: inherit; }
+.youpu-help-tip-trigger.has-custom-trigger:hover,
+.youpu-help-tip.is-open .youpu-help-tip-trigger.has-custom-trigger { color: var(--dv-danger); }
+.youpu-help-tip-trigger:focus-visible { outline: 2px solid var(--dv-text-muted); outline-offset: 2px; }
+.youpu-help-tip-panel { position: fixed; z-index: var(--yp-layer-system, var(--youpu-system-z, 2000)); width: min(360px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow: auto; border: 1px solid var(--dv-border); border-radius: 10px; background: var(--dv-surface); box-shadow: 0 16px 40px rgb(15 23 42 / 18%); color: var(--dv-text-muted); user-select: text; }
+.youpu-help-tip-panel.is-wide { width: min(420px, calc(100vw - 32px)); }
+.youpu-help-tip-title { display: block; padding: 11px 14px; background: var(--dv-danger-soft); color: var(--dv-danger); font-size: 14px; font-weight: 700; line-height: 1.4; }
+.youpu-help-tip-body { display: grid; gap: 7px; padding: 13px 14px 14px; font-size: 13px; line-height: 1.6; }
+.youpu-help-tip-body :where(p, ul, ol) { margin: 0; }
+.youpu-help-tip-body :where(b, strong) { color: var(--dv-text); }
 .youpu-loading-state,
 .youpu-empty-state,
 .youpu-error-state {
