@@ -2,6 +2,12 @@
 
 面向桌面 Web 运营/管理系统的轻量 UI 基线：**框架无关 Tokens/CSS + React 18/19 组件**。它来自有谱正式页面的真实使用，不包含任何业务路由、接口或数据。
 
+当前公开 Release 为 `v1.2.2`；从源码构建需要 Node.js 20 或更高版本。
+
+<p align="center">
+  <img src="./assets/readme/hero.svg" width="100%" alt="dongV UI System：Tokens、CSS 和 React 组件组成的桌面运营 UI 基线。">
+</p>
+
 ## 先选接入方式
 
 | 方式 | 适合谁 | 复杂度 |
@@ -18,16 +24,16 @@
 
 ## 普通使用者
 
-从 GitHub Release 下载 `dongv-ui-system-1.0.4.tgz`，然后安装：
+从 GitHub Release 下载 `dongv-ui-system-1.2.2.tgz`，然后安装：
 
 ```bash
-npm install ./dongv-ui-system-1.0.4.tgz
+npm install ./dongv-ui-system-1.2.2.tgz
 ```
 
 也可直接安装公开 Release：
 
 ```bash
-npm install https://github.com/dongV-x/dongV-UI-system/releases/download/v1.0.4/dongv-ui-system-1.0.4.tgz
+npm install https://github.com/dongV-x/dongV-UI-system/releases/download/v1.2.2/dongv-ui-system-1.2.2.tgz
 ```
 
 ## React 项目
