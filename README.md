@@ -8,6 +8,18 @@
   <img src="./assets/readme/hero.svg" width="100%" alt="dongV UI System：Tokens、CSS 和 React 组件组成的桌面运营 UI 基线。">
 </p>
 
+<p align="center">
+  <img src="./assets/readme/showcase.svg" width="100%" alt="dongV UI System 的层级：Tokens、CSS、React 组件和真实页面。">
+</p>
+
+## At a glance
+
+| Layer | Use it for |
+|---|---|
+| Tokens | 统一颜色、间距、圆角、状态和亮暗主题 |
+| CSS | 在非 React 或兼容项目里复用同一套 class |
+| React | 组合页面头部、表格、空态、状态和表单组件 |
+
 ## 先选接入方式
 
 | 方式 | 适合谁 | 复杂度 |
