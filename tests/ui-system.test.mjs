@@ -57,16 +57,16 @@ test("React primitives render semantic and accessible markup", () => {
 test("overlay source retains Escape, Tab trap and focus return", () => {
   const overlay = read("../src/react/YoupuUI.jsx");
   const dialog = read("../src/react/AppDialog.jsx");
-  for (const source of [overlay, dialog]) {
-    assert.match(source, /event\.key === "Escape"/);
-    assert.match(source, /event\.key !== "Tab"/);
-    assert.match(source, /previousFocusRef\.current/);
-    assert.match(source, /aria-modal="true"/);
-  }
-  assert.match(overlay, /const overlayStack = \[\]/);
-  assert.match(overlay, /panel\.setAttribute\("aria-modal", String\(active\)\)/);
-  assert.match(overlay, /panel\.inert = !active/);
-  assert.match(overlay, /overlayStack\.at\(-1\) !== panel/);
+  const focus = read("../src/react/overlayFocus.js");
+  for (const source of [overlay, dialog]) assert.match(source, /useOverlayFocus/);
+  assert.match(focus, /event\.key === "Escape"/);
+  assert.match(focus, /event\.key !== "Tab"/);
+  assert.match(focus, /previousFocusRef\.current/);
+  assert.match(focus, /const overlayStack = \[\]/);
+  assert.match(focus, /panel\.setAttribute\("aria-modal", String\(active\)\)/);
+  assert.match(focus, /panel\.inert = !active/);
+  assert.match(focus, /overlayStack\.at\(-1\) !== panel/);
+  for (const source of [overlay, dialog]) assert.match(source, /aria-modal="true"/);
   assert.doesNotMatch(overlay, /<aside[^>]+role="dialog"/);
 });
 
