@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.2.3 - 2026-09-06
+
 ### 修复
 
 - Modal 与 Drawer 嵌套时只有最上层保留 modal 语义和键盘响应，关闭后按层级归还焦点；Drawer 使用单一 dialog 语义。
