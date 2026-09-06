@@ -9,6 +9,16 @@ const CONTROL_SIZES = new Set(["table", "small", "compact", "medium", "large"]);
 const resolveControlSize = (size) => CONTROL_SIZES.has(size) ? size : "medium";
 
 const FOCUSABLE_SELECTOR = 'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
+const overlayStack = [];
+
+function syncOverlayStack() {
+  const activePanel = overlayStack.at(-1);
+  overlayStack.forEach((panel) => {
+    const active = panel === activePanel;
+    panel.setAttribute("aria-modal", String(active));
+    panel.inert = !active;
+  });
+}
 
 function useOverlayFocus(open, onClose, panelRef) {
   const previousFocusRef = React.useRef(null);
@@ -16,30 +26,37 @@ function useOverlayFocus(open, onClose, panelRef) {
   onCloseRef.current = onClose;
 
   React.useEffect(() => {
-    if (!open) return undefined;
+    const panel = panelRef.current;
+    if (!open || !panel) return undefined;
     previousFocusRef.current = document.activeElement;
+    overlayStack.push(panel);
+    syncOverlayStack();
     const focusInitial = window.requestAnimationFrame(() => {
-      const autoFocus = panelRef.current?.querySelector("[autofocus], [data-autofocus]");
-      const first = panelRef.current?.querySelector(FOCUSABLE_SELECTOR);
-      (autoFocus || first || panelRef.current)?.focus?.();
+      if (overlayStack.at(-1) !== panel) return;
+      const autoFocus = panel.querySelector("[autofocus], [data-autofocus]");
+      const first = panel.querySelector(FOCUSABLE_SELECTOR);
+      (autoFocus || first || panel)?.focus?.();
     });
     const handleKeyDown = (event) => {
-      if (!panelRef.current?.contains(document.activeElement)) return;
+      if (overlayStack.at(-1) !== panel) return;
       if (event.key === "Escape") {
         event.preventDefault();
         onCloseRef.current?.();
         return;
       }
       if (event.key !== "Tab") return;
-      const focusable = Array.from(panelRef.current?.querySelectorAll(FOCUSABLE_SELECTOR) || []);
+      const focusable = Array.from(panel.querySelectorAll(FOCUSABLE_SELECTOR));
       if (!focusable.length) {
         event.preventDefault();
-        panelRef.current?.focus?.();
+        panel.focus?.();
         return;
       }
       const first = focusable[0];
       const last = focusable.at(-1);
-      if (event.shiftKey && document.activeElement === first) {
+      if (!panel.contains(document.activeElement)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      } else if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
         last.focus();
       } else if (!event.shiftKey && document.activeElement === last) {
@@ -49,9 +66,19 @@ function useOverlayFocus(open, onClose, panelRef) {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => {
+      const wasTop = overlayStack.at(-1) === panel;
       window.cancelAnimationFrame(focusInitial);
       window.removeEventListener("keydown", handleKeyDown);
-      window.requestAnimationFrame(() => previousFocusRef.current?.focus?.());
+      const stackIndex = overlayStack.lastIndexOf(panel);
+      if (stackIndex >= 0) overlayStack.splice(stackIndex, 1);
+      panel.inert = false;
+      syncOverlayStack();
+      if (wasTop) window.requestAnimationFrame(() => {
+        const activePanel = overlayStack.at(-1);
+        const previous = previousFocusRef.current;
+        if (previous?.isConnected && (!activePanel || activePanel.contains(previous))) previous.focus?.();
+        else (activePanel?.querySelector(FOCUSABLE_SELECTOR) || activePanel)?.focus?.();
+      });
     };
   }, [open, panelRef]);
 }
@@ -437,7 +464,7 @@ export function Drawer({ open = true, onClose, ariaLabel, ariaLabelledby, overla
   if (!open) return null;
   return renderOverlay(
     <div className={classNames("youpu-drawer-overlay", overlayClassName)} role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose?.()}>
-      <aside ref={panelRef} className={classNames("youpu-drawer", className)} role="dialog" aria-modal="true" aria-label={ariaLabel} aria-labelledby={ariaLabelledby} tabIndex={-1}>{children}</aside>
+      <div ref={panelRef} className={classNames("youpu-drawer", className)} role="dialog" aria-modal="true" aria-label={ariaLabel} aria-labelledby={ariaLabelledby} tabIndex={-1}>{children}</div>
     </div>,
     portalTarget,
   );

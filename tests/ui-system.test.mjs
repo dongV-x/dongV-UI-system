@@ -63,6 +63,20 @@ test("overlay source retains Escape, Tab trap and focus return", () => {
     assert.match(source, /previousFocusRef\.current/);
     assert.match(source, /aria-modal="true"/);
   }
+  assert.match(overlay, /const overlayStack = \[\]/);
+  assert.match(overlay, /panel\.setAttribute\("aria-modal", String\(active\)\)/);
+  assert.match(overlay, /panel\.inert = !active/);
+  assert.match(overlay, /overlayStack\.at\(-1\) !== panel/);
+  assert.doesNotMatch(overlay, /<aside[^>]+role="dialog"/);
+});
+
+test("TrendAreaChart exposes each keyboard data point to assistive technology", () => {
+  const markup = renderToStaticMarkup(React.createElement(UI.TrendAreaChart, {
+    label: "成交金额",
+    series: [{ key: "gmv", label: "GMV", color: "red", points: [{ label: "周一", value: 100, display: "100元" }] }],
+  }));
+  assert.match(markup, /<svg[^>]+aria-label="成交金额趋势面积图"[^>]+role="group"/);
+  assert.match(markup, /<rect[^>]+role="img"[^>]+tabindex="0"[^>]+aria-label="周一 100元"/);
 });
 
 test("component CSS stays inside the UI system instead of resetting the host page", () => {

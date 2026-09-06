@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### 修复
+
+- Modal 与 Drawer 嵌套时只有最上层保留 modal 语义和键盘响应，关闭后按层级归还焦点；Drawer 使用单一 dialog 语义。
+- `TrendAreaChart` 的可聚焦数据点改为独立无障碍图形，读屏可读取每个点的名称和值。
+
 ## 1.2.2 - 2026-08-28
 
 ### 修复

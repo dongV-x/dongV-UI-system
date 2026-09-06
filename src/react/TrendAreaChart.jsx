@@ -104,10 +104,10 @@ export default function TrendAreaChart({
     setHover({ index, markerRx: 5 * 720 / box.width, markerRy: 5 * 260 / box.height, x: Math.min(window.innerWidth - 112, Math.max(112, clientX)), y: clientY });
   };
 
-  const target = portalTarget === undefined ? document.body : portalTarget;
+  const target = portalTarget === undefined && typeof document !== "undefined" ? document.body : portalTarget;
   return <div className={`trend-area-chart chart-wrap-live ${animate ? "home-chart-transition " : ""}${showYAxis ? "has-y-axis " : ""}${className}`.trim()} onMouseLeave={() => setHover(null)}>
     {showYAxis && <div aria-hidden="true" className="trend-area-chart-y chart-y-axis">{axisTicks.map((tick) => <span key={tick}>{axisLabel(tick, valueKind)}</span>)}</div>}
-    <svg ref={svgRef} className="trend-area-chart-svg daily-smooth-chart home-trend-chart" preserveAspectRatio="none" viewBox="0 0 720 260" aria-label={`${label}趋势面积图`} role="img" onMouseMove={(event) => {
+    <svg ref={svgRef} className="trend-area-chart-svg daily-smooth-chart home-trend-chart" preserveAspectRatio="none" viewBox="0 0 720 260" aria-label={`${label}趋势面积图`} role="group" onMouseMove={(event) => {
       const box = event.currentTarget.getBoundingClientRect();
       const index = Math.round(Math.min(1, Math.max(0, (event.clientX - box.left) / box.width)) * Math.max(0, count - 1));
       setHoverIndex(index, event.clientX, event.clientY, box);
@@ -117,7 +117,7 @@ export default function TrendAreaChart({
       {usable.flatMap((item) => segments(item.points).map((segment, segmentIndex) => <g key={`${item.key}-${segmentIndex}`} style={{ "--chart-color": item.color }}>{segment.length > 1 && <path className="area" d={area(segment)} style={showYAxis ? { fill: `url(#${gradientPrefix}-${item.key})`, opacity: 1 } : undefined} />}<path className="line" d={smoothPath(segment)} pathLength="1" /></g>))}
       {activeIndex !== undefined && <line className="hover-guide" x1={x(activeIndex)} x2={x(activeIndex)} y1="30" y2="228" />}
       {activeIndex !== undefined && rows.map((item) => <ellipse className="active-point" cx={x(activeIndex)} cy={y(item.point.value)} key={item.key} rx={hover.markerRx} ry={hover.markerRy} style={{ fill: item.color }} vectorEffect="non-scaling-stroke" />)}
-      {points.map((point, index) => <rect className="hover-zone" key={`${point.label}-${index}`} x={Math.max(0, x(index) - 350 / Math.max(1, count - 1))} y={plotTop} width={700 / Math.max(1, count - 1)} height={plotBottom - plotTop} tabIndex="0" aria-label={`${point.tooltipTitle || point.label} ${point.display || pointLabel(point.value)}`} onFocus={(event) => { const box = svgRef.current?.getBoundingClientRect(); if (box) setHoverIndex(index, box.left + box.width * x(index) / 720, box.top + box.height * y(point.value || 0) / 260, box); }} onBlur={() => setHover(null)} />)}
+      {points.map((point, index) => <rect className="hover-zone" key={`${point.label}-${index}`} x={Math.max(0, x(index) - 350 / Math.max(1, count - 1))} y={plotTop} width={700 / Math.max(1, count - 1)} height={plotBottom - plotTop} role="img" tabIndex="0" aria-label={`${point.tooltipTitle || point.label} ${point.display || pointLabel(point.value)}`} onFocus={(event) => { const box = svgRef.current?.getBoundingClientRect(); if (box) setHoverIndex(index, box.left + box.width * x(index) / 720, box.top + box.height * y(point.value || 0) / 260, box); }} onBlur={() => setHover(null)} />)}
     </svg>
     <div className="trend-area-chart-x chart-x-axis home-chart-x-axis">{points.map((item, index) => <span className={showAxisLabel(index) ? "" : "is-hidden"} key={`${item.label}-${index}`}>{showAxisLabel(index) ? item.label : "·"}</span>)}</div>
     {activeIndex !== undefined && rows.length > 0 && target && createPortal(<Tooltip as="div" className="trend-area-chart-tooltip live-chart-tooltip" style={{ left: hover.x, top: hover.y }}><strong>{rows[0].point.tooltipTitle || rows[0].point.label}</strong>{rows.map((item) => <span key={item.key}><i style={{ background: item.color }} />{item.label}<b>{item.point.display || pointLabel(item.point.value)}</b></span>)}{rows[0].point.note && <small>{rows[0].point.note}</small>}</Tooltip>, target)}
