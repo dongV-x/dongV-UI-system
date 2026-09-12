@@ -663,7 +663,10 @@ input.youpu-checkbox-control{accent-color:var(--dv-brand);appearance:auto;flex:0
 .youpu-multi-option:focus-within{outline:2px solid var(--dv-text-muted);outline-offset:2px}
 .youpu-multi-option.is-disabled{cursor:not-allowed;opacity:.6}
 .youpu-multi-option-label{min-width:0;overflow-wrap:anywhere}
-.youpu-multi-option > img{flex:0 0 auto;height:16px;width:16px;border-radius:4px;object-fit:cover}
+/* 传入的 leading 元素（店铺 logo、图标）统一约束尺寸。
+   作用域是整个控件而不是选项：触发器里也会渲染 leading，只写选项会把触发器漏掉，
+   原图按自然尺寸铺满（512px logo 直接把面板撑爆）。 */
+.youpu-multi img,.youpu-multi svg{flex:0 0 auto;height:16px;width:16px;border-radius:4px;object-fit:cover}
 
 .youpu-multi.is-inline{border:0;display:grid;gap:9px;margin:0;min-width:0;padding:0}
 .youpu-multi-head{align-items:center;display:flex;gap:10px;min-width:0;padding:0}

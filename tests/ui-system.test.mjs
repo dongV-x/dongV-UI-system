@@ -43,6 +43,27 @@ test("多选控件带行为契约，不是样式壳", () => {
   assert.match(markup, /aria-expanded="false"/);
 });
 
+test("多选控件在控件层约束 leading 元素尺寸，不能只写选项层", () => {
+  // 这条来自真实回归：规则原来只写 `.youpu-multi-option > img`，
+  // 但触发器里也会渲染 leading（已选 1 项时显示它的图标），触发器不受约束，
+  // 512px 的店铺 logo 按自然尺寸铺满，把整个面板撑爆。
+  // 判据：约束必须覆盖控件作用域（`.youpu-multi img`，不带 `>`），而不只是选项。
+  const css = read("../src/components.css");
+  const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ selector: m[1].trim(), body: m[2] }));
+  const constrained = (tag) => rules.filter((rule) => {
+    const sel = rule.selector;
+    if (!/(^|[\s,])\.youpu-multi\b/.test(sel)) return false;
+    // 要求是后代选择器（不带 > ），这样触发器和选项都覆盖到。
+    const scoped = new RegExp(`\\.youpu-multi(?:\\.[a-z-]+)*\\s+${tag}\\b`).test(sel);
+    return scoped && /\bwidth:/.test(rule.body) && /\bheight:/.test(rule.body);
+  });
+  assert.ok(constrained("img").length > 0, "多选控件必须在控件层约束 img 尺寸（.youpu-multi img），否则触发器里的 leading 会按自然尺寸铺满");
+  assert.ok(constrained("svg").length > 0, "多选控件必须在控件层约束 svg 尺寸（.youpu-multi svg）");
+  // 反向：不允许只写「选项内」这一种作用域。
+  const optionOnly = rules.filter((rule) => /\.youpu-multi-option\s*>\s*(img|svg)\b/.test(rule.selector));
+  assert.deepEqual(optionOnly, [], "不要只约束选项内的 img/svg——触发器同样会渲染 leading，会漏掉");
+});
+
 test("tokens keep the 1.0 baseline and generated CSS has no legacy source variables", () => {
   const tokens = JSON.parse(read("../src/tokens.json"));
   const css = read("../src/tokens.css");
