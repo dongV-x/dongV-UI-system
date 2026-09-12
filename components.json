@@ -1,5 +1,5 @@
 {
-  "version": "1.1.1",
+  "version": "1.2.7",
   "components": [
     {
       "name": "AppDialogProvider",
@@ -44,6 +44,38 @@
         },
         {
           "name": "onClick",
+          "default": null
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "children",
+          "default": null
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "Checkbox",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "checked",
+          "default": null
+        },
+        {
+          "name": "indeterminate",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "default": "false"
+        },
+        {
+          "name": "id",
           "default": null
         },
         {
@@ -258,6 +290,42 @@
       "rest": true
     },
     {
+      "name": "HelpTip",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "规则解释浮窗：默认问号，也可沿用页面已有文字作为触发区。",
+      "props": [
+        {
+          "name": "title",
+          "default": null
+        },
+        {
+          "name": "ariaLabel",
+          "default": null
+        },
+        {
+          "name": "trigger",
+          "default": null
+        },
+        {
+          "name": "width",
+          "default": "\"standard\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "portalTarget",
+          "default": null
+        },
+        {
+          "name": "children",
+          "default": null
+        }
+      ],
+      "rest": false
+    },
+    {
       "name": "Input",
       "file": "src/react/YoupuUI.jsx",
       "doc": "",
@@ -291,8 +359,36 @@
       "doc": "",
       "props": [
         {
+          "name": "as",
+          "default": "\"div\""
+        },
+        {
+          "name": "ariaLabel",
+          "default": "\"正在加载\""
+        },
+        {
           "name": "className",
           "default": "\"\""
+        },
+        {
+          "name": "columns",
+          "default": null
+        },
+        {
+          "name": "density",
+          "default": "\"standard\""
+        },
+        {
+          "name": "rows",
+          "default": null
+        },
+        {
+          "name": "scope",
+          "default": "\"section\""
+        },
+        {
+          "name": "children",
+          "default": null
         }
       ],
       "rest": true
@@ -360,6 +456,66 @@
         },
         {
           "name": "children",
+          "default": null
+        }
+      ],
+      "rest": false
+    },
+    {
+      "name": "MultiSelect",
+      "file": "src/react/MultiSelect.jsx",
+      "doc": "多选：一次可选多项的统一样式与行为。  为什么是组件而不是各处自己写：下拉选择器只有单值（Select / SingleSelect）， 需要「同时勾选几项」的场景只能各自拼 Checkbox + 浮层，选中态、全选/清空、 计数文案和关闭行为每次都不一样。  行为契约： - `dropdown` 走草稿提交：改动只在内部，点确认才回调 onChange，取消/ESC/点外部回滚 - `inline` 即时生效：每次勾选立刻回调 onChange - 两种形态都支持全选与清空；计数文案由 formatSelection 决定 - dropdown 关闭后焦点归还触发按钮 - 选中的选项才着色；未选中保持中性，避免\"一片彩色\"读不出选了哪些",
+      "props": [
+        {
+          "name": "label",
+          "default": null
+        },
+        {
+          "name": "value",
+          "default": "[]"
+        },
+        {
+          "name": "options",
+          "default": "[]"
+        },
+        {
+          "name": "onChange",
+          "default": null
+        },
+        {
+          "name": "variant",
+          "default": "\"dropdown\""
+        },
+        {
+          "name": "itemVariant",
+          "default": "\"plain\""
+        },
+        {
+          "name": "required",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "default": "false"
+        },
+        {
+          "name": "placeholder",
+          "default": "\"请选择\""
+        },
+        {
+          "name": "formatSelection",
+          "default": null
+        },
+        {
+          "name": "labels",
+          "default": "{}"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "id",
           "default": null
         }
       ],
@@ -435,6 +591,10 @@
           "default": "\"请选择\""
         },
         {
+          "name": "size",
+          "default": "\"medium\""
+        },
+        {
           "name": "value",
           "default": "\"\""
         }
@@ -501,6 +661,34 @@
         {
           "name": "as",
           "default": "\"div\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "rest": true
+    },
+    {
+      "name": "Textarea",
+      "file": "src/react/YoupuUI.jsx",
+      "doc": "",
+      "props": [
+        {
+          "name": "invalid",
+          "default": "false"
+        },
+        {
+          "name": "rows",
+          "default": "3"
+        },
+        {
+          "name": "resize",
+          "default": "\"vertical\""
+        },
+        {
+          "name": "size",
+          "default": "\"medium\""
         },
         {
           "name": "className",

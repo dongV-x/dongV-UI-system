@@ -1,5 +1,65 @@
 # Changelog
 
+## 1.2.7 - 2026-09-12
+
+### 修复
+
+- `MultiSelect`：选项的焦点描边原来用 `:focus-within`，鼠标点一下也会画出一圈灰框并一直挂着，看起来像另一种选中态。改为只在键盘聚焦（`:focus-visible`）时显示，并补门禁防止退回。鼠标点击不再留下残留焦点环。
+
+## 1.2.6 - 2026-09-12
+
+### 修复
+
+- `MultiSelect`：leading 元素的尺寸约束原来只作用在选项上，触发器里渲染 leading（已选 1 项时显示图标）时不受约束，512px 的图片会按自然尺寸铺满整个面板。改为在控件层约束 `img` / `svg`，并补一条门禁防止退回「只写选项层」。
+
+## 1.2.5 - 2026-09-12
+
+### 新增
+
+- `MultiSelect`：多选控件。两种形态 `dropdown`（工具条省空间，草稿提交、取消/ESC/点外部回滚并归还焦点）与 `inline`（表单铺开，即时生效）；选项形态 `plain` / `card` / `chip`；支持全选、清空、必填标记与自定义计数文案。未选中保持中性、选中才着色，色调由 `--youpu-multi-tone` 决定且可按项覆盖（用于按人/按店配色）。
+
+## Unreleased
+
+## 1.2.4 - 2026-09-06
+
+### 修复
+
+- `AppDialog` 与 Modal、Drawer 共用同一浮层栈，嵌套确认框打开时底层正确移除 modal 语义并设为 inert。
+
+## 1.2.3 - 2026-09-06
+
+### 修复
+
+- Modal 与 Drawer 嵌套时只有最上层保留 modal 语义和键盘响应，关闭后按层级归还焦点；Drawer 使用单一 dialog 语义。
+- `TrendAreaChart` 的可聚焦数据点改为独立无障碍图形，读屏可读取每个点的名称和值。
+
+## 1.2.2 - 2026-08-28
+
+### 修复
+
+- 移除错误的自依赖和误生成的运行时依赖，避免 GitHub Actions 在 `npm ci` 时从 npm registry 下载不存在的 `dongv-ui-system`。
+
+## 1.2.1 - 2026-08-28
+
+### 新增
+
+- `HelpTip`：统一带问号的规则解释，支持悬停/聚焦显示、浮窗内停留与文本选择、离开/点击外部/Escape 关闭、视口定位和系统最高层级；短提示继续使用 `Tooltip`。
+
+## 1.2.0 - 2026-08-23
+
+### 新增
+
+- **控件尺寸契约**：`Button`、`Input`、`Select` 统一支持 `table` 28px、`small` 30px、`compact` 32px、`medium` 36px、`large` 42px；`Select` 保留 `compactTable` 兼容入口。
+- **LoadingState 表格骨架**：支持 `rows`、`columns`、`density`、`ariaLabel`，稳定容器高度并在 reduced-motion 下关闭 shimmer。
+- **Textarea**：提供原生多行语义、`rows`、尺寸、校验态、resize 和描述关联。
+- **Checkbox**：提供受控/非受控、indeterminate、禁用、标签关联和混合态无障碍语义。
+- **DataTable 默认契约**：默认单元格居中、垂直居中、等宽数字和安全内边距。
+
+### 兼容
+
+- 未知尺寸回退到 `medium`；旧组件调用无需修改。
+- `LoadingState` 未传 `children` 时使用新骨架，旧 children 行为保留。
+
 ## 1.1.1
 
 ### 新增

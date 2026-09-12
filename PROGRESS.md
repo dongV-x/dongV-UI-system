@@ -8,4 +8,4 @@
 6. 有谱 PR：https://github.com/dongV-x/youpu/pull/1，保持未合并，等待 dongV 审阅。
 7. 已发布 `v1.0.1`：收口宿主样式污染，校准 Select / HelpPopover / AppDialog 无障碍，升级 CI Action，并把接入方式压缩为 Tokens、React、兼容 CSS 三档。
 8. `main` 与 `v1.0.1` 两次 GitHub CI 均通过 React 18/19 矩阵；真实 Release tgz 已在全新项目完成安装、0 漏洞、Vite 构建、内置浏览器与 Lighthouse Accessibility 100 验收。
-9. 下一步：让有谱 PR #1 升级同一 `v1.0.1` Release；仍不合并、不部署、不操作 Windows、不修改正式数据。
+9. 已完成 1.2.0 发布候选：控件尺寸、LoadingState 表格骨架、Textarea、Checkbox、DataTable 默认契约及机器清单均已通过本地包验证；待有权限后提交并发布 GitHub Release，再让有谱升级依赖。
