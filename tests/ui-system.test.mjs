@@ -399,3 +399,11 @@ test("README 声明的当前 Release 版本与 package.json 一致", () => {
   assert.ok(declared, "README 必须写明当前公开 Release 版本");
   assert.equal(declared[1], JSON.parse(read("../package.json")).version, "README 写的版本和 package.json 不一致");
 });
+
+test("inline 多选的标题行占满整行，全选/清空才推得到右边", () => {
+  // <legend> 默认按内容收缩：不写 width:100% 时 head 只有内容那么宽，
+  // 里面 .youpu-multi-bulk 的 margin-left:auto 就永远推不到右侧。
+  // 实测过：容器 1095px 时 head 只有 248px，全选按钮卡在标题旁边。
+  const css = read("../src/components.css");
+  assert.match(css, /\.youpu-multi-head\{[^}]*width:100%/, "inline 多选的标题行必须占满整行");
+});
