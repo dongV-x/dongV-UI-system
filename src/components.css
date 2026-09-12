@@ -660,7 +660,9 @@ input.youpu-checkbox-control{accent-color:var(--dv-brand);appearance:auto;flex:0
 .youpu-multi-option{align-items:center;background:var(--dv-surface);border:1px solid var(--youpu-multi-line);border-radius:var(--dv-radius-control);color:var(--dv-text);cursor:pointer;display:inline-flex;gap:7px;min-width:0;padding:7px 10px}
 .youpu-multi-option:hover{border-color:color-mix(in srgb,var(--youpu-multi-tone) 34%,var(--youpu-multi-line));background:color-mix(in srgb,var(--youpu-multi-tone) 5%,var(--dv-surface))}
 .youpu-multi-option.is-selected{border-color:color-mix(in srgb,var(--youpu-multi-tone) 52%,transparent);background:color-mix(in srgb,var(--youpu-multi-tone) 13%,var(--dv-surface));color:color-mix(in srgb,var(--youpu-multi-tone) 86%,var(--dv-text))}
-.youpu-multi-option:focus-within{outline:2px solid var(--dv-text-muted);outline-offset:2px}
+/* 只在键盘聚焦时显示描边：用 :focus-within 的话鼠标点一下也会留一圈灰框，
+   点击后一直挂着，看起来像「选中态」其实是残留焦点环。 */
+.youpu-multi-option:has(.youpu-checkbox-control:focus-visible){outline:2px solid var(--dv-text-muted);outline-offset:2px}
 .youpu-multi-option.is-disabled{cursor:not-allowed;opacity:.6}
 .youpu-multi-option-label{min-width:0;overflow-wrap:anywhere}
 /* 传入的 leading 元素（店铺 logo、图标）统一约束尺寸。

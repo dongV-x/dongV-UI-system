@@ -43,6 +43,14 @@ test("多选控件带行为契约，不是样式壳", () => {
   assert.match(markup, /aria-expanded="false"/);
 });
 
+test("多选选项的焦点描边只在键盘聚焦时出现", () => {
+  // 用 :focus-within 的话，鼠标点一下也会留一圈灰框并一直挂着，
+  // 看起来像另一种选中态，实际是残留的焦点环。必须用 :focus-visible。
+  const css = read("../src/components.css");
+  assert.match(css, /\.youpu-multi-option:has\(\.youpu-checkbox-control:focus-visible\)\s*\{/, "多选选项的描边必须绑定 :focus-visible");
+  assert.doesNotMatch(css, /\.youpu-multi-option:focus-within\s*\{/, "多选选项不得用 :focus-within 画描边（鼠标点击会残留）");
+});
+
 test("多选控件在控件层约束 leading 元素尺寸，不能只写选项层", () => {
   // 这条来自真实回归：规则原来只写 `.youpu-multi-option > img`，
   // 但触发器里也会渲染 leading（已选 1 项时显示它的图标），触发器不受约束，
