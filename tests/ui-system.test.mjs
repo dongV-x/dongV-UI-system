@@ -391,3 +391,11 @@ test("组件清单与源码同步：新增/删除组件必须重新生成清单"
     assert.ok(md.includes(`**${name}**`), `COMPONENTS.md 缺少 ${name}`);
   }
 });
+
+test("README 声明的当前 Release 版本与 package.json 一致", () => {
+  // README 开头写着「当前公开 Release 为 vX.Y.Z」。它曾经停在 v1.2.2 一直没动，
+  // 一路落后五个版本——这种没人会去核对的版本号，交给门禁盯，不靠谁想起来。
+  const declared = read("../README.md").match(/当前公开 Release 为 `v([\d.]+)`/);
+  assert.ok(declared, "README 必须写明当前公开 Release 版本");
+  assert.equal(declared[1], JSON.parse(read("../package.json")).version, "README 写的版本和 package.json 不一致");
+});
