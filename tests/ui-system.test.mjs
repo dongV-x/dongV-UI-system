@@ -8,8 +8,39 @@ import * as UI from "../dist/index.js";
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
 test("public exports include the agreed reusable surface", () => {
-  const expected = ["AppDialogProvider", "Button", "Checkbox", "ClassificationTag", "ContributionDonutChart", "DataTable", "Drawer", "EmptyState", "ErrorState", "Field", "HelpPopover", "HelpTip", "Input", "LoadingState", "MetaTag", "Modal", "PageHeader", "PageTabs", "Select", "SingleSelect", "StatusBadge", "TableToolbar", "Textarea", "Toast", "Tooltip", "TrendAreaChart", "useAppDialog"];
+  const expected = ["AppDialogProvider", "Button", "Checkbox", "ClassificationTag", "ContributionDonutChart", "DataTable", "Drawer", "EmptyState", "ErrorState", "Field", "HelpPopover", "HelpTip", "Input", "LoadingState", "MetaTag", "Modal", "MultiSelect", "PageHeader", "PageTabs", "Select", "SingleSelect", "StatusBadge", "TableToolbar", "Textarea", "Toast", "Tooltip", "TrendAreaChart", "useAppDialog"];
   assert.deepEqual(Object.keys(UI).sort(), expected.sort());
+});
+
+test("多选控件带行为契约，不是样式壳", () => {
+  const source = read("../src/react/MultiSelect.jsx");
+  const css = read("../src/components.css");
+  // 两种形态：dropdown 走草稿提交可回滚，inline 即时生效。
+  assert.match(source, /variant === "dropdown" \? setDraft/);
+  assert.match(source, /if \(!draft\.length\) return;[\s\S]*onChange\?\.\(draft\)/);
+  // 取消/ESC/点外部都要回滚草稿并归还焦点，否则会出现"看着改了其实没改"。
+  assert.match(source, /const closePanel = \(focusBack = true\) => \{[\s\S]*setDraft\(value\)[\s\S]*triggerRef\.current\?\.focus/);
+  assert.match(source, /event\.key === "Escape"/);
+  assert.match(source, /!panelRef\.current\?\.contains\(event\.target\)/);
+  // 全选与清空两种形态都要有。
+  assert.match(source, /isAll\(list\) \? clear : all/);
+  // 选中才着色，未选中保持中性；色调可被单项覆盖以支持按人/按店配色。
+  assert.match(source, /--youpu-multi-tone/);
+  assert.match(css, /\.youpu-multi-option\.is-selected\{[^}]*--youpu-multi-tone/);
+  // 无障碍：触发器声明展开态，面板是可聚焦的 dialog。
+  assert.match(source, /aria-expanded=\{open\}/);
+  assert.match(source, /role="dialog"/);
+  // 渲染实际产物，确认三档 itemVariant 与两种形态都能出结构。
+  const markup = renderToStaticMarkup(React.createElement("div", null,
+    React.createElement(UI.MultiSelect, { label: "店铺", options: [{ value: "a", label: "甲店" }], value: ["a"] }),
+    React.createElement(UI.MultiSelect, { label: "跟进人", variant: "inline", itemVariant: "chip", required: true, options: [{ value: "b", label: "乙" }], value: ["b"] }),
+    React.createElement(UI.MultiSelect, { label: "导入", variant: "inline", itemVariant: "card", options: [{ value: "c", label: "丙店" }], value: [] }),
+  ));
+  assert.match(markup, /youpu-multi is-dropdown/);
+  assert.match(markup, /youpu-multi is-inline/);
+  assert.match(markup, /youpu-multi-option is-chip is-selected/);
+  assert.match(markup, /youpu-multi-option is-card/);
+  assert.match(markup, /aria-expanded="false"/);
 });
 
 test("tokens keep the 1.0 baseline and generated CSS has no legacy source variables", () => {

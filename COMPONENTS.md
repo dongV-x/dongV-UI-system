@@ -2,7 +2,7 @@
 
 由 `npm run manifest` 从 `src/react/*.jsx` 生成。**新增组件前先查这里**，不要因为「没找到」就写原生标签。
 
-共 26 个导出组件。
+共 27 个导出组件。
 
 | 组件 | props | 说明 |
 |---|---|---|
@@ -22,6 +22,7 @@
 | **LoadingState** | `as`="div"、`ariaLabel`="正在加载"、`className`=""、`columns`、`density`="standard"、`rows`、`scope`="section"、`children` + 透传 |  |
 | **MetaTag** | `tone`="neutral"、`className`="" + 透传 |  |
 | **Modal** | `open`=true、`onClose`、`title`、`ariaLabel`、`overlayClassName`=""、`className`=""、`width`、`closeLabel`="关闭"、`closeIcon`="×"、`portalTarget`、`children` |  |
+| **MultiSelect** | `label`、`value`=[]、`options`=[]、`onChange`、`variant`="dropdown"、`itemVariant`="plain"、`required`=false、`disabled`=false、`placeholder`="请选择"、`formatSelection`、`labels`={}、`className`=""、`id` | 多选：一次可选多项的统一样式与行为。  为什么是组件而不是各处自己写：下拉选择器只有单值（Select / SingleSelect）， 需要「同时勾选几项」的场景只能各自拼 Checkbox + 浮层，选中态、全选/清空、 计数文案和关闭行为每次都不一样。  行为契约： - `dropdown` 走草稿提交：改动只在内部，点确认才回调 onChange，取消/ESC/点外部回滚 - `inline` 即时生效：每次勾选立刻回调 onChange - 两种形态都支持全选与清空；计数文案由 formatSelection 决定 - dropdown 关闭后焦点归还触发按钮 - 选中的选项才着色；未选中保持中性，避免"一片彩色"读不出选了哪些 |
 | **PageHeader** | `as`="header"、`className`="" + 透传 |  |
 | **PageTabs** | `className`="" + 透传 |  |
 | **Select** | `ariaLabel`、`className`=""、`compactTable`=false、`contentWidth`=false、`disabled`=false、`menuMinWidth`、`onChange`、`options`=[]、`placeholder`="请选择"、`size`="medium"、`value`="" |  |

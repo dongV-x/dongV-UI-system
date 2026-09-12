@@ -652,3 +652,39 @@ input.youpu-checkbox-control{accent-color:var(--dv-brand);appearance:auto;flex:0
 .youpu-field-required{color:var(--dv-danger);margin-left:2px}
 .youpu-field-error{color:var(--dv-danger);font-size:12px;margin:0}
 .youpu-field-hint{color:var(--dv-text-muted);font-size:12px;margin:0}
+
+/* ── 多选 ──────────────────────────────────────────────────────────
+   两种形态共用一套选中态：未选中保持中性，选中才着色，色调由 --youpu-multi-tone 决定
+   （页面可按项传 tone，实现按人/按店配色）。 */
+.youpu-multi{--youpu-multi-tone:var(--dv-brand);--youpu-multi-line:var(--dv-border)}
+.youpu-multi-option{align-items:center;background:var(--dv-surface);border:1px solid var(--youpu-multi-line);border-radius:var(--dv-radius-control);color:var(--dv-text);cursor:pointer;display:inline-flex;gap:7px;min-width:0;padding:7px 10px}
+.youpu-multi-option:hover{border-color:color-mix(in srgb,var(--youpu-multi-tone) 34%,var(--youpu-multi-line));background:color-mix(in srgb,var(--youpu-multi-tone) 5%,var(--dv-surface))}
+.youpu-multi-option.is-selected{border-color:color-mix(in srgb,var(--youpu-multi-tone) 52%,transparent);background:color-mix(in srgb,var(--youpu-multi-tone) 13%,var(--dv-surface));color:color-mix(in srgb,var(--youpu-multi-tone) 86%,var(--dv-text))}
+.youpu-multi-option:focus-within{outline:2px solid var(--dv-text-muted);outline-offset:2px}
+.youpu-multi-option.is-disabled{cursor:not-allowed;opacity:.6}
+.youpu-multi-option-label{min-width:0;overflow-wrap:anywhere}
+.youpu-multi-option > img{flex:0 0 auto;height:16px;width:16px;border-radius:4px;object-fit:cover}
+
+.youpu-multi.is-inline{border:0;display:grid;gap:9px;margin:0;min-width:0;padding:0}
+.youpu-multi-head{align-items:center;display:flex;gap:10px;min-width:0;padding:0}
+.youpu-multi-title{color:var(--dv-text);font-size:var(--dv-font-body-size);font-weight:600}
+.youpu-multi-required{color:var(--dv-danger);margin-left:2px}
+.youpu-multi-count{color:var(--dv-text-muted);font-size:12px;min-width:0}
+.youpu-multi-bulk{display:inline-flex;flex:0 0 auto;gap:2px;margin-left:auto}
+.youpu-multi.is-inline > .youpu-multi-options{display:flex;flex-wrap:wrap;gap:6px}
+
+.youpu-multi-option.is-card{font-size:var(--dv-font-body-size);min-height:34px}
+.youpu-multi-option.is-chip{border-radius:5px;font-size:12px;font-weight:600;line-height:1.35;min-height:22px;padding:0 9px}
+.youpu-multi-option.is-chip > .youpu-checkbox-control{display:none}
+.youpu-multi-option.is-chip.is-selected::before{content:"✓";font-size:10px;margin-right:4px}
+
+.youpu-multi.is-dropdown{align-items:center;display:flex;gap:10px;min-width:0;position:relative}
+.youpu-multi.is-dropdown > .youpu-button{flex:1;gap:6px;justify-content:flex-start;min-width:0}
+.youpu-multi-caret{border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid var(--dv-text-muted);flex:0 0 auto;margin-left:auto}
+.youpu-multi-value{color:var(--dv-text);font-size:var(--dv-font-body-size);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.youpu-multi-value.is-placeholder{color:var(--dv-text-muted);font-weight:400}
+.youpu-multi-panel{background:var(--dv-surface);border:1px solid var(--youpu-multi-line);border-radius:var(--dv-radius-floating);box-shadow:var(--dv-shadow-floating);display:grid;gap:1px;left:0;max-height:356px;max-width:min(420px,calc(100vw - 32px));min-width:260px;outline:0;overflow:hidden;padding:6px;position:absolute;right:auto;top:calc(100% + 6px);z-index:1200}
+.youpu-multi-panel > .youpu-multi-options{display:grid;gap:1px;overflow:auto}
+.youpu-multi-panel .youpu-multi-option{background:transparent;border-color:transparent;border-radius:6px}
+.youpu-multi-panel .youpu-multi-option.is-all{color:var(--dv-text-muted);font-size:12px}
+.youpu-multi-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;padding:0 2px 2px}

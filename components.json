@@ -1,5 +1,5 @@
 {
-  "version": "1.2.4",
+  "version": "1.2.5",
   "components": [
     {
       "name": "AppDialogProvider",
@@ -456,6 +456,66 @@
         },
         {
           "name": "children",
+          "default": null
+        }
+      ],
+      "rest": false
+    },
+    {
+      "name": "MultiSelect",
+      "file": "src/react/MultiSelect.jsx",
+      "doc": "多选：一次可选多项的统一样式与行为。  为什么是组件而不是各处自己写：下拉选择器只有单值（Select / SingleSelect）， 需要「同时勾选几项」的场景只能各自拼 Checkbox + 浮层，选中态、全选/清空、 计数文案和关闭行为每次都不一样。  行为契约： - `dropdown` 走草稿提交：改动只在内部，点确认才回调 onChange，取消/ESC/点外部回滚 - `inline` 即时生效：每次勾选立刻回调 onChange - 两种形态都支持全选与清空；计数文案由 formatSelection 决定 - dropdown 关闭后焦点归还触发按钮 - 选中的选项才着色；未选中保持中性，避免\"一片彩色\"读不出选了哪些",
+      "props": [
+        {
+          "name": "label",
+          "default": null
+        },
+        {
+          "name": "value",
+          "default": "[]"
+        },
+        {
+          "name": "options",
+          "default": "[]"
+        },
+        {
+          "name": "onChange",
+          "default": null
+        },
+        {
+          "name": "variant",
+          "default": "\"dropdown\""
+        },
+        {
+          "name": "itemVariant",
+          "default": "\"plain\""
+        },
+        {
+          "name": "required",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "default": "false"
+        },
+        {
+          "name": "placeholder",
+          "default": "\"请选择\""
+        },
+        {
+          "name": "formatSelection",
+          "default": null
+        },
+        {
+          "name": "labels",
+          "default": "{}"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "id",
           "default": null
         }
       ],
