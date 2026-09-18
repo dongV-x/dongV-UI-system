@@ -1,5 +1,7 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import { Button } from "./YoupuUI.jsx";
+import { useFloatingPanel } from "./overlayFocus.js";
 
 /**
  * 多选：一次可选多项的统一样式与行为。
@@ -14,6 +16,7 @@ import { Button } from "./YoupuUI.jsx";
  * - 两种形态都支持全选与清空；计数文案由 formatSelection 决定
  * - dropdown 关闭后焦点归还触发按钮
  * - 选中的选项才着色；未选中保持中性，避免"一片彩色"读不出选了哪些
+ * - 面板 Portal 到 body 并按视口定位：祖先有 overflow 裁切/滚动时不会被裁掉或带着跑
  */
 export function MultiSelect({
   label,
@@ -28,6 +31,7 @@ export function MultiSelect({
   formatSelection,
   labels = {},
   className = "",
+  panelClassName = "",
   id,
 }) {
   const { all = "全选", clear = "清空", cancel = "取消", confirm = "确认" } = labels;
@@ -38,6 +42,15 @@ export function MultiSelect({
   const reactId = React.useId();
   const baseId = id || `youpu-multi-${reactId.replace(/:/g, "")}`;
   const listId = `${baseId}-options`;
+  // 面板自身高度上限来自 CSS（356px），这里只用来判断该不该翻到触发器上方。
+  const position = useFloatingPanel({
+    open,
+    panelRef,
+    triggerRef,
+    estimatedHeight: Math.min(356, options.length * 30 + 96),
+    // 宽度交给内容与 CSS：面板一直是这样（min-width:260px），页面也能按需改宽。
+    matchTriggerWidth: false,
+  });
 
   const selected = options.filter((item) => value.includes(item.value));
   const countText = formatSelection
@@ -125,11 +138,12 @@ export function MultiSelect({
       <b className={`youpu-multi-value${selected.length ? "" : " is-placeholder"}`}>{countText}</b>
       <span aria-hidden="true" className="youpu-multi-caret" />
     </Button>
-    {open && !disabled && <div
+    {open && !disabled && position && createPortal(<div
       aria-label={label ? `${label}选项` : "选项"}
-      className="youpu-multi-panel"
+      className={`youpu-multi-panel ${panelClassName}`.trim()}
       ref={panelRef}
       role="dialog"
+      style={position}
       tabIndex={-1}
     >
       <label className={`youpu-multi-option is-${itemVariant} is-all`}>
@@ -141,7 +155,7 @@ export function MultiSelect({
         <Button onClick={() => closePanel()} type="button">{cancel}</Button>
         <Button className="primary-button" disabled={!draft.length} onClick={commit} type="button">{confirm}</Button>
       </div>
-    </div>}
+    </div>, document.body)}
   </div>;
 }
 

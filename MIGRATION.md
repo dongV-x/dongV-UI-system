@@ -25,6 +25,13 @@ flowchart TD
     E -->|是| G[按迁移说明修改后再验收]
 ```
 
+## 1.3.0 下拉面板 Portal 到 body
+
+- 三种下拉的面板不再渲染在控件内部，而是 Portal 到 `body` 并固定定位；层级与位置由组件负责。
+- **要改的面板样式**：`.某容器 .youpu-multi-panel`、`.某容器 .youpu-single-select-menu`、`.某容器 .youpu-multi-options / .youpu-multi-option / .youpu-multi-footer` 这类后代选择器不再命中。给控件传 `panelClassName` / `menuClassName`，然后把选择器改成面板类名本身（例：`.youpu-multi-panel.store-multi-select-panel`）。
+- **要删的补丁**：为了让面板「逃出」裁切容器而写的 `overflow:visible`、`position:relative`、`z-index` 提升，以及 `.youpu-*-panel:has(...)` 之类的容器改写，都可以删掉。
+- 面板层级仍可用 `--youpu-popover-z` 调整；确实需要盖住高层弹窗时，在面板类名上写 `z-index`。
+
 ## 1.2.9 多选长列表
 
 - `MultiSelect` 下拉：选项多时列表在面板内滚动，底部的取消/确认常驻面板底部，不再被裁掉。页面如果为「面板裁掉确认键」在 `.youpu-multi-options` 上写过 `max-height` 补丁，可以删掉；保留也不会冲突（那只是把列表压得更短）。

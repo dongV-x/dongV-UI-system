@@ -35,6 +35,15 @@
 | A11Y-02 | pass | Codex 内置浏览器 960 亮/暗主题均无横向溢出，Console 无 warning/error |
 
 
+## 1.3.0 三种下拉面板 Portal 到 body（不再被祖先裁切）
+
+| ID | 状态 | 直接证据 |
+|---|---|---|
+| PORTAL-01 | pass | `npm run check` 全绿（tokens / manifest / 31 tests / library+example build / scan / pack dry-run）；门禁锁住「面板走 createPortal 到 body + position:fixed + 共享 useFloatingPanel 定位」，退回容器内 absolute 即红 |
+| PORTAL-02 | pass | 有谱真环境实测四个页面（库存查询虚拟仓多选、日销复盘店铺单选、经营总览店铺多选、财务复盘店铺多选、1440 宽）：面板 `parent=BODY`、`position=fixed`、全部在视口内、底部确认键在面板内。前三个页面里的面板原先都处在 `overflow` 容器或裁切根里 |
+| PORTAL-03 | pass | 同一环境实测内容驱动的宽度会被视口收边：经营总览店铺多选面板 460px、left 972（右边缘 1432 ≤ 1440）；日销复盘店铺单选 280px；ResizeObserver 在页面 CSS 后到导致面板变宽时会重新收边（修前实测溢出 37px） |
+| PORTAL-04 | pass | `SingleSelect` 面板离开控件后「点外部关闭」已把面板算进内部（否则点选项会被当成点外部）；有谱 386 个前端用例 + 60 张视觉基线零回归 |
+
 ## 1.2.9 多选长列表不再把确认键裁掉
 
 | ID | 状态 | 直接证据 |

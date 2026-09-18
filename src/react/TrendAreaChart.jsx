@@ -107,7 +107,9 @@ export default function TrendAreaChart({
   const target = portalTarget === undefined && typeof document !== "undefined" ? document.body : portalTarget;
   return <div className={`trend-area-chart chart-wrap-live ${animate ? "home-chart-transition " : ""}${showYAxis ? "has-y-axis " : ""}${className}`.trim()} onMouseLeave={() => setHover(null)}>
     {showYAxis && <div aria-hidden="true" className="trend-area-chart-y chart-y-axis">{axisTicks.map((tick) => <span key={tick}>{axisLabel(tick, valueKind)}</span>)}</div>}
-    <svg ref={svgRef} className="trend-area-chart-svg daily-smooth-chart home-trend-chart" preserveAspectRatio="none" viewBox="0 0 720 260" aria-label={`${label}趋势面积图`} role="group" onMouseMove={(event) => {
+    {/* data-trend-ticks 是刻度数的稳定标记：包内只发 dist，消费方门禁靠它核对刻度契约，
+        不必依赖会被压缩改名的最小化代码形状（2026-09-18 修）。 */}
+    <svg data-trend-ticks={axisTickCount} ref={svgRef} className="trend-area-chart-svg daily-smooth-chart home-trend-chart" preserveAspectRatio="none" viewBox="0 0 720 260" aria-label={`${label}趋势面积图`} role="group" onMouseMove={(event) => {
       const box = event.currentTarget.getBoundingClientRect();
       const index = Math.round(Math.min(1, Math.max(0, (event.clientX - box.left) / box.width)) * Math.max(0, count - 1));
       setHoverIndex(index, event.clientX, event.clientY, box);

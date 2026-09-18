@@ -1,6 +1,6 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import { useOverlayFocus } from "./overlayFocus.js";
+import { useFloatingPanel, useOverlayFocus } from "./overlayFocus.js";
 
 function classNames(...names) {
   return names.filter(Boolean).join(" ");
@@ -189,36 +189,23 @@ export function Select({ ariaLabel, className = "", compactTable = false, conten
   const optionRefs = React.useRef([]);
   const [open, setOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(-1);
-  const [position, setPosition] = React.useState(null);
   const selectedIndex = options.findIndex((option) => String(option.value) === String(value));
   const selected = selectedIndex >= 0 ? options[selectedIndex] : null;
-
-  const updatePosition = React.useCallback(() => {
-    const rect = triggerRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const estimatedHeight = Math.min(280, options.length * 34 + 8);
-    const openUp = window.innerHeight - rect.bottom < estimatedHeight && rect.top > window.innerHeight - rect.bottom;
-    const requestedMenuWidth = Number.parseFloat(menuMinWidth) || rect.width;
-    const menuWidth = Math.max(rect.width, requestedMenuWidth);
-    const left = Math.max(8, Math.min(rect.left, window.innerWidth - menuWidth - 8));
-    setPosition({ left, width: rect.width, minWidth: menuMinWidth, ...(openUp ? { bottom: window.innerHeight - rect.top + 4 } : { top: rect.bottom + 4 }) });
-  }, [menuMinWidth, options.length]);
+  const position = useFloatingPanel({
+    open,
+    triggerRef,
+    estimatedHeight: Math.min(280, options.length * 34 + 8),
+    minWidth: menuMinWidth,
+  });
 
   React.useEffect(() => {
     if (!open) return undefined;
-    updatePosition();
     const closeOutside = (event) => {
       if (!triggerRef.current?.contains(event.target) && !menuRef.current?.contains(event.target)) setOpen(false);
     };
-    window.addEventListener("resize", updatePosition);
-    window.addEventListener("scroll", updatePosition, true);
     document.addEventListener("pointerdown", closeOutside);
-    return () => {
-      window.removeEventListener("resize", updatePosition);
-      window.removeEventListener("scroll", updatePosition, true);
-      document.removeEventListener("pointerdown", closeOutside);
-    };
-  }, [open, updatePosition]);
+    return () => document.removeEventListener("pointerdown", closeOutside);
+  }, [open]);
 
   const enabledIndex = (start, direction) => {
     for (let index = start; index >= 0 && index < options.length; index += direction) {
@@ -334,19 +321,24 @@ export function MetaTag({ tone = "neutral", className = "", ...props }) {
   return <span className={classNames("youpu-meta-tag", `is-${tone}`, className)} {...props} />;
 }
 
-export function SingleSelect({ ariaLabel, className = "", disabled = false, id, onChange, options, value }) {
+export function SingleSelect({ ariaLabel, className = "", disabled = false, id, onChange, options, value, menuClassName = "" }) {
   const [open, setOpen] = React.useState(false);
   const rootRef = React.useRef(null);
   const triggerRef = React.useRef(null);
+  const menuRef = React.useRef(null);
   const optionRefs = React.useRef([]);
   const listboxId = React.useId();
   const selectedIndex = Math.max(0, options.findIndex((option) => option.value === value));
   const selected = options[selectedIndex];
+  const position = useFloatingPanel({ open, triggerRef, estimatedHeight: Math.min(280, options.length * 34 + 12) });
 
   React.useEffect(() => {
     if (!open) return undefined;
     const frame = window.requestAnimationFrame(() => optionRefs.current[selectedIndex]?.focus());
-    const closeOutside = (event) => { if (!rootRef.current?.contains(event.target)) setOpen(false); };
+    // 面板已经 Portal 到 body，外面的判断必须把面板本身算进去，否则点选项会先被当成「点外部」关掉。
+    const closeOutside = (event) => {
+      if (!rootRef.current?.contains(event.target) && !menuRef.current?.contains(event.target)) setOpen(false);
+    };
     document.addEventListener("mousedown", closeOutside);
     return () => { window.cancelAnimationFrame(frame); document.removeEventListener("mousedown", closeOutside); };
   }, [open, selectedIndex]);
@@ -365,7 +357,7 @@ export function SingleSelect({ ariaLabel, className = "", disabled = false, id, 
 
   return <div className={classNames("youpu-single-select", className)} onKeyDown={handleKeyDown} ref={rootRef}>
     <button aria-controls={listboxId} aria-expanded={open} aria-haspopup="listbox" aria-label={ariaLabel} className="youpu-single-select-trigger" disabled={disabled} id={id} onClick={() => setOpen((current) => !current)} ref={triggerRef} type="button"><span>{selected?.label || "请选择"}</span><i aria-hidden="true" /></button>
-    {open && <div aria-label={ariaLabel} className="youpu-single-select-menu" id={listboxId} role="listbox">{options.map((option, index) => <button aria-selected={option.value === value} className={option.value === value ? "is-selected" : ""} disabled={option.disabled} key={option.value} onClick={() => choose(option)} ref={(element) => { optionRefs.current[index] = element; }} role="option" type="button">{option.label}</button>)}</div>}
+    {open && position && renderOverlay(<div aria-label={ariaLabel} className={classNames("youpu-single-select-menu", menuClassName)} id={listboxId} ref={menuRef} role="listbox" style={position}>{options.map((option, index) => <button aria-selected={option.value === value} className={option.value === value ? "is-selected" : ""} disabled={option.disabled} key={option.value} onClick={() => choose(option)} ref={(element) => { optionRefs.current[index] = element; }} role="option" type="button">{option.label}</button>)}</div>)}
   </div>;
 }
 

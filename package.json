@@ -1,6 +1,6 @@
 {
   "name": "dongv-ui-system",
-  "version": "1.2.9",
+  "version": "1.3.0",
   "description": "Reusable desktop operations UI tokens, CSS and React components from dongV.",
   "type": "module",
   "license": "MIT",

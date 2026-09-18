@@ -52,6 +52,7 @@ flowchart TD
 
 - 普通表单优先使用原生控件；需要浮层定位、表格紧凑模式或统一键盘契约时再用公共 `Select`。
 - `Select` 是新项目入口；`SingleSelect`、`youpu-*` class 和 `compat/youpu.css` 只为有谱 V1 兼容保留，不继续扩展第二套能力。
+- 三种下拉（`Select` / `SingleSelect` / `MultiSelect`）的面板一律 Portal 到 `body` 并按触发器视口坐标做 `fixed` 定位，位置与层级由组件给定：页面不得靠 `z-index` 或裁切容器补丁让面板「看得见」。页面要对面板本身加样式（宽度、内边距、行高）时，用 `menuClassName` / `panelClassName` 传一个类名——面板不在控件内部，后代选择器不会命中。
 - 自研组件只负责已有明确契约的 PageHeader、Tabs、表格、状态、浮层、页面状态和两类图表。
 - Arco 只允许目标项目自行选用；本包不导入、不要求安装。
 - 新需求先作为单页实现；至少第二处出现且用途一致，才进入共享层。

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0 - 2026-09-18
+
+### 修复（含行为变化）
+
+- `MultiSelect` / `SingleSelect`：下拉面板原来在控件内部做 `absolute` 定位，只要祖先里有 `overflow:hidden/auto/clip`（弹窗正文、滚动容器、带裁切的页面根），面板就会被裁掉一截或跟着滚动容器跑掉。现在和 `Select` 一样 Portal 到 `body`，用触发器的视口坐标做 `fixed` 定位：空间不够翻到上方，高度按可视空间给，祖先滚动/窗口缩放时跟随重定位。
+- 配套新增：`MultiSelect` 的 `panelClassName`、`SingleSelect` 的 `menuClassName`。**面板不再位于控件内部，页面里 `.某容器 .youpu-multi-panel` 这类后代选择器不会再命中**，改用 `.youpu-multi-panel.自定义类` 或 `.youpu-single-select-menu.自定义类`（见 MIGRATION.md）。
+- 修复 `SingleSelect` 的同类隐患：「点外部关闭」原来只判断控件本身，面板离开控件后会把点选项误判为点外部。
+
 ## 1.2.9 - 2026-09-18
 
 ### 修复

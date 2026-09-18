@@ -92,6 +92,40 @@ test("多选面板把长列表收在自己的高度里，底部确认键不能�
   assert.match(options.body, /overflow:auto/, "列表必须自己滚");
 });
 
+test("三种下拉面板都 Portal 到 body 并按视口定位，不被祖先 overflow 裁掉", () => {
+  // 真实回归（2026-09-18）：面板原来是控件里的 absolute 子节点，只要祖先有 overflow:hidden/auto/clip
+  // 就会被裁掉一截或跟着滚动容器的滚动跑掉（有谱「库存查询」15 个虚拟仓就是这样丢了确认键）。
+  // 判据：面板必须走 createPortal 到 body，位置由触发器视口坐标算出的 fixed 内联样式给。
+  const hook = read("../src/react/overlayFocus.js");
+  assert.match(hook, /export function useFloatingPanel/, "定位逻辑必须在共享 hook 里，三处面板复用同一份");
+  assert.match(hook, /getBoundingClientRect\(\)/);
+  assert.match(hook, /"scroll", reposition, true\)/, "祖先滚动容器滚动时要重新定位（捕获阶段）");
+  assert.match(hook, /maxHeight/, "面板高度要按可视空间给，长列表在面板内部滚");
+  assert.match(hook, /const measured = panelRef\?\.current\?\.getBoundingClientRect\(\)/, "面板渲染后要按真实尺寸再收一次，内容驱动的宽度才不会被视口切掉");
+  assert.match(hook, /const lastKeyRef = React\.useRef\(""\)/, "重复几何结果不能重复 setState（挂载后再量会死循环）");
+  assert.match(hook, /new ResizeObserver\(\(\) => update\(\)\)/, "面板尺寸变化（页面 CSS 后到）必须再收一次，否则会从视口右边溢出");
+
+  const multi = read("../src/react/MultiSelect.jsx");
+  assert.match(multi, /useFloatingPanel\(/);
+  assert.match(multi, /createPortal\([\s\S]*document\.body\)/, "多选面板必须 Portal 到 body");
+  assert.match(multi, /panelClassName/);
+
+  const single = read("../src/react/YoupuUI.jsx");
+  assert.match(single, /export function SingleSelect\(\{[\s\S]*?menuClassName/, "SingleSelect 要能带页面自己的面板类名（面板不在控件里，后代选择器不再命中）");
+  assert.match(single, /renderOverlay\(<div aria-label=\{ariaLabel\} className=\{classNames\("youpu-single-select-menu"/, "SingleSelect 面板必须走 Portal");
+  // 面板离开控件之后，「点外部关闭」的判断必须把面板本身算进去，否则点选项会被当成点外部。
+  assert.match(single, /if \(!rootRef\.current\?\.contains\(event\.target\) && !menuRef\.current\?\.contains\(event\.target\)\) setOpen\(false\);/);
+
+  const css = read("../src/components.css");
+  const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ selector: m[1].trim(), body: m[2] }));
+  for (const selector of [".youpu-multi-panel", ".youpu-single-select-menu", ".youpu-select-menu"]) {
+    const rule = rules.find((item) => item.selector === selector);
+    assert.ok(rule, `找不到 ${selector} 规则`);
+    assert.match(rule.body, /position:\s*fixed/, `${selector} 必须是 fixed 定位，才不受祖先 overflow 影响`);
+    assert.doesNotMatch(rule.body, /position:\s*absolute/, `${selector} 不能再走控件内的 absolute 定位`);
+  }
+});
+
 test("tokens keep the 1.0 baseline and generated CSS has no legacy source variables", () => {
   const tokens = JSON.parse(read("../src/tokens.json"));
   const css = read("../src/tokens.css");
