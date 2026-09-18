@@ -72,6 +72,26 @@ test("多选控件在控件层约束 leading 元素尺寸，不能只写选项�
   assert.deepEqual(optionOnly, [], "不要只约束选项内的 img/svg——触发器同样会渲染 leading，会漏掉");
 });
 
+test("多选面板把长列表收在自己的高度里，底部确认键不能被裁掉", () => {
+  // 真实回归（2026-09-18，有谱「库存查询」虚拟仓）：面板是带 max-height 的浮层且 overflow:hidden，
+  // 列表如果是普通网格行就会按内容高度撑开（15 个仓实测 569px，面板只有 356px），
+  // 于是列表被裁、底部的取消/确认一起被裁出面板——使用者看到的是「选了仓点查询没反应」。
+  // 判据：面板是纵向 flex 容器，列表是能长也能缩（min-height:0）且自己滚的那一项。
+  const css = read("../src/components.css");
+  const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ selector: m[1].trim(), body: m[2] }));
+  const panel = rules.find((rule) => rule.selector === ".youpu-multi-panel");
+  assert.ok(panel, "找不到 .youpu-multi-panel 规则");
+  assert.match(panel.body, /display:flex/);
+  assert.match(panel.body, /flex-direction:column/, "面板要纵向排，才能把剩余高度分给列表而不是撑开");
+  assert.match(panel.body, /max-height:/);
+  assert.match(panel.body, /overflow:hidden/, "面板仍然是裁剪的浮层，靠列表自己滚而不是靠裁");
+  const options = rules.find((rule) => rule.selector === ".youpu-multi-panel > .youpu-multi-options");
+  assert.ok(options, "找不到面板内的列表规则");
+  assert.match(options.body, /flex:1 1 auto/);
+  assert.match(options.body, /min-height:0/, "没有 min-height:0 时 flex 项不会缩到内容高度以下，面板照旧裁掉列表和确认键");
+  assert.match(options.body, /overflow:auto/, "列表必须自己滚");
+});
+
 test("tokens keep the 1.0 baseline and generated CSS has no legacy source variables", () => {
   const tokens = JSON.parse(read("../src/tokens.json"));
   const css = read("../src/tokens.css");

@@ -33,3 +33,12 @@
 | COPY-01 | pass | DESIGN.md 固化副文案三类准入、无动作空状态一句事实和技术详情边界；示例状态不使用重复说明 |
 | PKG-03 | pass | `npm run check`：10/10 tests、library/example build、scan、pack dry-run 全部通过；包 12 files、22.1 kB |
 | A11Y-02 | pass | Codex 内置浏览器 960 亮/暗主题均无横向溢出，Console 无 warning/error |
+
+
+## 1.2.9 多选长列表不再把确认键裁掉
+
+| ID | 状态 | 直接证据 |
+|---|---|---|
+| MULTI-LONG-01 | pass | `npm run check` 全绿（tokens / manifest / 测试 / library+example build / scan / pack dry-run）。新增门禁锁住「面板纵向 flex + 列表 `flex:1 1 auto;min-height:0;overflow:auto`」，退回网格布局即红 |
+| MULTI-LONG-02 | pass | 有谱真环境实测（库存查询 · 15 个虚拟仓 · 1440 宽）：列表高 260px 且 `scrollHeight > clientHeight` 可滚；底部确认键 bottom 494 ≤ 面板 bottom 501（在面板内可点）；整页 `scrollWidth` 1440 = `innerWidth`，无横向溢出 |
+| MULTI-LONG-03 | pass | 同一真环境端到端：取消勾选 1 个仓 → 确认 → 触发键「已选 14 个仓」→ 查询请求只带这 14 个仓 id → 结果「14 个仓 · 14 条记录」 |
