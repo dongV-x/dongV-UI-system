@@ -11,6 +11,7 @@ export default function ContributionDonutChart({
   className = "",
   footer = null,
   emptyMessage = "暂无构成数据",
+  layout = "standard",
 }) {
   const [hoverKey, setHoverKey] = React.useState("");
   const usable = items.filter((item) => Number.isFinite(Number(item.value)) && Number(item.value) > 0);
@@ -44,7 +45,9 @@ export default function ContributionDonutChart({
     toggle(item);
   };
 
-  return <div className={`contribution-donut-chart ${className}`.trim()}>
+  // compact：圆环缩小、图例只留名称/金额/占比，窄栏（约 430px 起）也能把图例放在圆环右侧。
+  const layoutClass = layout === "compact" ? " is-compact" : "";
+  return <div className={`contribution-donut-chart${layoutClass} ${className}`.trim()}>
     <div className="contribution-donut-visual">
       <svg className="contribution-donut-svg" viewBox="0 0 190 190" aria-label={`${centerLabel}构成环形图`}>
         <circle className="contribution-donut-track" cx="95" cy="95" r="68" pathLength="100" />

@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "components": [
     {
       "name": "AppDialogProvider",
@@ -153,6 +153,10 @@
         {
           "name": "emptyMessage",
           "default": "\"暂无构成数据\""
+        },
+        {
+          "name": "layout",
+          "default": "\"standard\""
         }
       ],
       "rest": false

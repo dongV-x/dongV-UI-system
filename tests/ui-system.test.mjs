@@ -461,3 +461,16 @@ test("inline 多选的标题行占满整行，全选/清空才推得到右边", 
   const css = read("../src/components.css");
   assert.match(css, /\.youpu-multi-head\{[^}]*width:100%/, "inline 多选的标题行必须占满整行");
 });
+
+test("环图 compact 布局：窄栏也是圆环左、图例右，默认布局不变", () => {
+  const items = [{ key: "a", label: "脚架", value: 30, color: "#21c7a8" }, { key: "b", label: "箱包", value: 10, color: "#ff9f1a" }];
+  const standard = renderToStaticMarkup(React.createElement(UI.ContributionDonutChart, { items }));
+  const compact = renderToStaticMarkup(React.createElement(UI.ContributionDonutChart, { items, layout: "compact", className: "page-donut" }));
+  assert.match(standard, /class="contribution-donut-chart"/);
+  assert.match(compact, /class="contribution-donut-chart is-compact page-donut"/);
+  const css = read("../src/components.css");
+  assert.match(css, /\.contribution-donut-chart\.is-compact \{ grid-template-columns: 168px minmax\(0, 1fr\);/);
+  assert.match(css, /\.contribution-donut-chart\.is-compact \.contribution-donut-bar \{ display: none; \}/);
+  // 手机宽度仍然上下排，不能把 168px 圆环硬挤在一行。
+  assert.match(css, /@media \(max-width: 720px\) \{\s*\.contribution-donut-chart\.is-compact \{ grid-template-columns: 1fr;/);
+});
