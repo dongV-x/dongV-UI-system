@@ -485,3 +485,21 @@ test("环图图例可带图标；compact 图例名称常规、金额加粗、占
   assert.match(css, /\.contribution-donut-chart\.is-compact \.contribution-donut-value \{ font-weight: 650;/);
   assert.match(css, /\.contribution-donut-chart\.is-compact \.contribution-donut-share \{[^}]*color: var\(--donut-muted\)/);
 });
+
+
+test("TrendAreaChart ticks trim trailing zeroes without rounding meaningful fractions or point labels", () => {
+  const ticks = (values, valueKind = 'money') => {
+    const html = renderToStaticMarkup(React.createElement(UI.TrendAreaChart, {
+      showYAxis: true, valueKind,
+      series: [{ key: 'a', label: 'Amount', color: 'red', points: values.map(value => ({ label: 'Point', value })) }],
+    }));
+    const axis = html.match(/class="trend-area-chart-y chart-y-axis">(.*?)<\/div>/)[1];
+    return { labels: [...axis.matchAll(/<span>(.*?)<\/span>/g)].map(match => match[1]), html };
+  };
+  assert.deepEqual(ticks([0, 4000000]).labels, ['400万', '300万', '200万', '100万', '0']);
+  assert.deepEqual(ticks([-20000, 30000]).labels, ['3万', '1.75万', '5,000', '-7,500', '-2万']);
+  assert.deepEqual(ticks([0, 100000000]).labels, ['1亿', '7,500万', '5,000万', '2,500万', '0']);
+  assert.deepEqual(ticks([0, .03], 'rate').labels, ['4%', '3%', '2%', '1%', '0']);
+  assert.deepEqual(ticks([0, 1.5], 'ratio').labels, ['1.5', '1.13', '0.75', '0.38', '0']);
+  assert.match(ticks([123.4]).html, /aria-label="Point 123.40"/);
+});

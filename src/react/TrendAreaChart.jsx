@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { Tooltip } from "./YoupuUI.jsx";
 
 const rates = new Intl.NumberFormat("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const axisNumbers = new Intl.NumberFormat("zh-CN", { maximumFractionDigits: 2 });
 const hasNumber = (value) => value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value));
 
 function niceScaleMax(value, minimum = 1) {
@@ -18,13 +19,13 @@ function niceScaleMax(value, minimum = 1) {
 function axisLabel(value, valueKind) {
   const numeric = Number(value) || 0;
   if (numeric === 0) return "0";
-  if (valueKind === "rate") return `${rates.format(numeric * 100)}%`;
-  if (valueKind === "ratio") return rates.format(numeric);
+  if (valueKind === "rate") return `${axisNumbers.format(numeric * 100)}%`;
+  if (valueKind === "ratio") return axisNumbers.format(numeric);
   if (valueKind === "integer") return Math.round(numeric).toLocaleString("zh-CN");
   const absolute = Math.abs(numeric);
-  if (absolute >= 100000000) return `${rates.format(numeric / 100000000)}亿`;
-  if (absolute >= 10000) return `${rates.format(numeric / 10000)}万`;
-  return rates.format(numeric);
+  if (absolute >= 100000000) return `${axisNumbers.format(numeric / 100000000)}亿`;
+  if (absolute >= 10000) return `${axisNumbers.format(numeric / 10000)}万`;
+  return axisNumbers.format(numeric);
 }
 
 function pointLabel(value) {
