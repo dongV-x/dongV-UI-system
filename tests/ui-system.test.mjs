@@ -469,8 +469,19 @@ test("环图 compact 布局：窄栏也是圆环左、图例右，默认布局�
   assert.match(standard, /class="contribution-donut-chart"/);
   assert.match(compact, /class="contribution-donut-chart is-compact page-donut"/);
   const css = read("../src/components.css");
-  assert.match(css, /\.contribution-donut-chart\.is-compact \{ grid-template-columns: 168px minmax\(0, 1fr\);/);
+  assert.match(css, /\.contribution-donut-chart\.is-compact \{ grid-template-columns: 148px minmax\(0, 1fr\);/);
   assert.match(css, /\.contribution-donut-chart\.is-compact \.contribution-donut-bar \{ display: none; \}/);
   // 手机宽度仍然上下排，不能把 168px 圆环硬挤在一行。
   assert.match(css, /@media \(max-width: 720px\) \{\s*\.contribution-donut-chart\.is-compact \{ grid-template-columns: 1fr;/);
+});
+
+test("环图图例可带图标；compact 图例名称常规、金额加粗、占比退后", () => {
+  const icon = React.createElement("svg", { "data-test-icon": "1" });
+  const html = renderToStaticMarkup(React.createElement(UI.ContributionDonutChart, { layout: "compact", items: [{ key: "a", label: "脚架", value: 3, color: "#21c7a8", icon }, { key: "b", label: "箱包", value: 1, color: "#ff9f1a" }] }));
+  assert.match(html, /<span class="contribution-donut-icon" aria-hidden="true"><svg data-test-icon="1"><\/svg><\/span><span><strong>脚架<\/strong>/);
+  assert.doesNotMatch(html.split("箱包")[0].split("脚架")[1] || "", /contribution-donut-icon/, "没给图标的项不渲染空图标位");
+  const css = read("../src/components.css");
+  assert.match(css, /\.contribution-donut-chart\.is-compact \.contribution-donut-name strong \{ font-weight: 500;/);
+  assert.match(css, /\.contribution-donut-chart\.is-compact \.contribution-donut-value \{ font-weight: 650;/);
+  assert.match(css, /\.contribution-donut-chart\.is-compact \.contribution-donut-share \{[^}]*color: var\(--donut-muted\)/);
 });

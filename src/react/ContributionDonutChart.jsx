@@ -94,7 +94,7 @@ export default function ContributionDonutChart({
           onBlur={() => setHoverKey("")}
           onClick={() => toggle(item)}
         >
-          <span className="contribution-donut-name"><i style={{ background: item.color }} /><span><strong>{item.label}</strong>{item.meta && <small>{item.meta}</small>}</span></span>
+          <span className="contribution-donut-name"><i style={{ background: item.color }} />{item.icon ? <span className="contribution-donut-icon" aria-hidden="true">{item.icon}</span> : null}<span><strong>{item.label}</strong>{item.meta && <small>{item.meta}</small>}</span></span>
           <span className="contribution-donut-bar"><i style={{ width: `${item.share * 100}%`, background: item.color }} /></span>
           <b className="contribution-donut-value">{formatValue(item.value)}</b>
           <strong className="contribution-donut-share">{(item.share * 100).toFixed(1)}%</strong>

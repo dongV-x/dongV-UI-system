@@ -599,14 +599,21 @@
 
 
 /* compact：窄栏里也保持「圆环左、图例右」；图例去掉占比条，行更矮。 */
-.contribution-donut-chart.is-compact { grid-template-columns: 168px minmax(0, 1fr); gap: 16px; }
-.contribution-donut-chart.is-compact .contribution-donut-visual { min-height: 168px; }
-.contribution-donut-chart.is-compact .contribution-donut-svg { width: 168px; height: 168px; }
-.contribution-donut-chart.is-compact .contribution-donut-center { width: 92px; }
-.contribution-donut-chart.is-compact .contribution-donut-center b { font-size: 17px; }
+.contribution-donut-chart.is-compact { grid-template-columns: 148px minmax(0, 1fr); gap: 14px; }
+.contribution-donut-chart.is-compact .contribution-donut-visual { min-height: 148px; }
+.contribution-donut-chart.is-compact .contribution-donut-svg { width: 148px; height: 148px; }
+.contribution-donut-chart.is-compact .contribution-donut-center { width: 84px; }
+.contribution-donut-chart.is-compact .contribution-donut-center b { font-size: 16px; }
 .contribution-donut-chart.is-compact .contribution-donut-list { gap: 2px; }
-.contribution-donut-chart.is-compact .contribution-donut-row { grid-template-columns: minmax(0, 1fr) auto 50px; gap: 10px; padding: 6px 8px; }
+.contribution-donut-chart.is-compact .contribution-donut-row { grid-template-columns: minmax(0, 1fr) auto 46px; gap: 8px; padding: 6px 6px; }
 .contribution-donut-chart.is-compact .contribution-donut-bar { display: none; }
+/* compact 图例的文字层次：名称常规、金额加粗、占比退后；色块改小圆角方块。 */
+.contribution-donut-chart.is-compact .contribution-donut-name { gap: 8px; }
+.contribution-donut-chart.is-compact .contribution-donut-name > i { border-radius: 3px; }
+.contribution-donut-chart.is-compact .contribution-donut-name strong { font-weight: 500; color: var(--donut-text); }
+.contribution-donut-chart.is-compact .contribution-donut-value { font-weight: 650; color: var(--donut-text); }
+.contribution-donut-chart.is-compact .contribution-donut-share { font-size: 13px; font-weight: 500; color: var(--donut-muted); }
+.contribution-donut-icon { display: inline-flex; flex: 0 0 auto; }
 @media (max-width: 720px) {
   .contribution-donut-chart.is-compact { grid-template-columns: 1fr; gap: 10px; }
 }
