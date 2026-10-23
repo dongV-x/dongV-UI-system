@@ -599,9 +599,9 @@
 
 
 /* compact：窄栏里也保持「圆环左、图例右」；图例去掉占比条，行更矮。 */
-.contribution-donut-chart.is-compact { grid-template-columns: 148px minmax(0, 1fr); gap: 14px; }
-.contribution-donut-chart.is-compact .contribution-donut-visual { min-height: 148px; }
-.contribution-donut-chart.is-compact .contribution-donut-svg { width: 148px; height: 148px; }
+.contribution-donut-chart.is-compact { grid-template-columns: var(--donut-compact-size, 148px) minmax(0, 1fr); gap: 14px; }
+.contribution-donut-chart.is-compact .contribution-donut-visual { min-height: var(--donut-compact-size, 148px); }
+.contribution-donut-chart.is-compact .contribution-donut-svg { width: var(--donut-compact-size, 148px); height: var(--donut-compact-size, 148px); }
 .contribution-donut-chart.is-compact .contribution-donut-center { width: 84px; }
 .contribution-donut-chart.is-compact .contribution-donut-center b { font-size: 16px; }
 .contribution-donut-chart.is-compact .contribution-donut-list { gap: 2px; }

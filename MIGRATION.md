@@ -82,3 +82,5 @@ flowchart TD
 - `Button`、`Input`、`Select` 统一支持 `table=28px`、`small=30px`、`compact=32px`、`medium=36px`、`large=42px`；省略 `size` 或传入未知值均回退到 `medium`。
 - `Select` 的旧 `compactTable` 入口继续保留原 class 和视觉行为；新代码可改用 `size="table"`。
 `LoadingState` 表格骨架的 `rows`、`columns` 只接受 1—20 的整数（非整数或无法解析时使用默认值 4/6，超出范围会截断到边界）；未提供列布局时按等宽占位，不能直接用于带业务 `colgroup` 的真实表格。
+
+compact环图可通过 `--donut-compact-size` 保留既有尺寸，默认148px；宿主不要覆盖内部SVG或命中圆弧选择器。

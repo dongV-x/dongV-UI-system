@@ -469,7 +469,7 @@ test("环图 compact 布局：窄栏也是圆环左、图例右，默认布局�
   assert.match(standard, /class="contribution-donut-chart"/);
   assert.match(compact, /class="contribution-donut-chart is-compact page-donut"/);
   const css = read("../src/components.css");
-  assert.match(css, /\.contribution-donut-chart\.is-compact \{ grid-template-columns: 148px minmax\(0, 1fr\);/);
+  assert.match(css, /\.contribution-donut-chart\.is-compact \{ grid-template-columns: var\(--donut-compact-size, 148px\) minmax\(0, 1fr\);/);
   assert.match(css, /\.contribution-donut-chart\.is-compact \.contribution-donut-bar \{ display: none; \}/);
   // 手机宽度仍然上下排，不能把 168px 圆环硬挤在一行。
   assert.match(css, /@media \(max-width: 720px\) \{\s*\.contribution-donut-chart\.is-compact \{ grid-template-columns: 1fr;/);
