@@ -521,3 +521,14 @@ test("TrendAreaChart shows isolated values without bridging gaps or inventing ze
   assert.doesNotMatch(render([null, null]), /isolated-point/);
   assert.doesNotMatch(render([1, 2, 3]), /isolated-point/);
 });
+
+test("donut controlled multiselect highlights every selected segment and preserves legacy single selection", () => {
+  const items = ["a", "b", "c"].map(key => ({ key, label: key, value: 1 }));
+  for (const props of [{ selectedKeys: ["a", "b"] }, { selectedKey: "a" }, { selectedKeys: [], selectedKey: "a" }]) {
+    const html = renderToStaticMarkup(React.createElement(UI.ContributionDonutChart, { items, ...props }));
+    const count = props.selectedKeys?.length ?? 1;
+    assert.equal((html.match(/contribution-donut-row is-selected/g) || []).length, count);
+    assert.equal((html.match(/donut-chart-segment is-active/g) || []).length, count);
+    assert.equal((html.match(/aria-pressed="true"/g) || []).length, count * 2);
+  }
+});

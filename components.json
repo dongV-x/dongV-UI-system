@@ -1,5 +1,5 @@
 {
-  "version": "1.5.3",
+  "version": "1.6.0",
   "components": [
     {
       "name": "AppDialogProvider",
@@ -140,6 +140,14 @@
         },
         {
           "name": "onSelect",
+          "default": null
+        },
+        {
+          "name": "selectedKeys",
+          "default": null
+        },
+        {
+          "name": "onSelectionChange",
           "default": null
         },
         {

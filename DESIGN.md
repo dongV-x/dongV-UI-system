@@ -82,3 +82,5 @@ flowchart TD
 **不要为了改一处样式而绕开这三个组件**：需要新变体时在此新增 variant，不要在业务侧写原生标签加 class——那正是接入方出现 436 处原生 `<button>` 的原因。
 
 compact环图可通过 `--donut-compact-size` 保留既有尺寸，默认148px；宿主不要覆盖内部SVG或命中圆弧选择器。
+
+环图支持受控 `selectedKeys` / `onSelectionChange` 多选；悬停临时突出单项，移开恢复所有选中项。多选时圆心保留全局合计，单选API保持兼容；圆弧与图例同步 aria-pressed。

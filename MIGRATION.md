@@ -1,5 +1,9 @@
 # 迁移与升级
 
+## 1.6.0 环图多选
+
+- 需要多选时传 `selectedKeys` 数组与 `onSelectionChange`；显式空数组不回退单选。原 `selectedKey` / `onSelect` 消费者无需迁移。
+
 ## 1.5.3 孤立趋势点
 
 - 无需迁移参数；所有 TrendAreaChart 消费者自动显示孤立有效点，连续趋势不变。

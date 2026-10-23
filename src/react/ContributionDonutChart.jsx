@@ -8,6 +8,8 @@ export default function ContributionDonutChart({
   formatValue = defaultValue,
   selectedKey = "",
   onSelect,
+  selectedKeys,
+  onSelectionChange,
   className = "",
   footer = null,
   emptyMessage = "暂无构成数据",
@@ -18,7 +20,9 @@ export default function ContributionDonutChart({
   const total = usable.reduce((sum, item) => sum + Number(item.value), 0);
   if (!usable.length || total <= 0) return <div className={`contribution-donut-empty ${className}`.trim()}>{emptyMessage}</div>;
 
-  const activeKey = hoverKey || selectedKey;
+  const selected = selectedKeys ?? (selectedKey ? [selectedKey] : []);
+  const activeKeys = hoverKey ? [hoverKey] : selected;
+  const activeKey = hoverKey || (selected.length === 1 ? selected[0] : "");
   const activeItem = usable.find((item) => item.key === activeKey);
   let offset = 0;
   const segments = usable.map((item) => {
@@ -38,7 +42,10 @@ export default function ContributionDonutChart({
     return segment;
   });
 
-  const toggle = (item) => onSelect?.(selectedKey === item.key ? "" : item.key);
+  const toggle = (item) => {
+    if (selectedKeys !== undefined) onSelectionChange?.(selected.includes(item.key) ? selected.filter(key => key !== item.key) : [...selected, item.key]);
+    else onSelect?.(selectedKey === item.key ? "" : item.key);
+  };
   const keyDown = (event, item) => {
     if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();
@@ -52,8 +59,8 @@ export default function ContributionDonutChart({
       <svg className="contribution-donut-svg" viewBox="0 0 190 190" aria-label={`${centerLabel}构成环形图`}>
         <circle className="contribution-donut-track" cx="95" cy="95" r="68" pathLength="100" />
         {segments.map((item) => {
-          const active = item.key === activeKey;
-          const segmentClass = active ? "donut-chart-segment is-active" : activeKey ? "donut-chart-segment is-muted" : "donut-chart-segment";
+          const active = activeKeys.includes(item.key);
+          const segmentClass = active ? "donut-chart-segment is-active" : activeKeys.length ? "donut-chart-segment is-muted" : "donut-chart-segment";
           return <circle
             key={item.key}
             className={segmentClass}
@@ -62,6 +69,7 @@ export default function ContributionDonutChart({
             r="68"
             pathLength="100"
             role="button"
+            aria-pressed={selected.includes(item.key)}
             tabIndex="0"
             aria-label={`${item.label}，${formatValue(item.value)}，${(item.share * 100).toFixed(1)}%`}
             stroke={item.color}
@@ -87,7 +95,8 @@ export default function ContributionDonutChart({
         {segments.map((item) => <button
           type="button"
           key={item.key}
-          className={item.key === selectedKey ? "contribution-donut-row is-selected" : "contribution-donut-row"}
+          aria-pressed={selected.includes(item.key)}
+          className={selected.includes(item.key) ? "contribution-donut-row is-selected" : "contribution-donut-row"}
           onMouseEnter={() => setHoverKey(item.key)}
           onMouseLeave={() => setHoverKey("")}
           onFocus={() => setHoverKey(item.key)}

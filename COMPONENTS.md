@@ -10,7 +10,7 @@
 | **Button** | `variant`="secondary"、`size`="medium"、`loading`=false、`disabled`=false、`icon`、`type`="button"、`onClick`、`className`=""、`children` + 透传 |  |
 | **Checkbox** | `checked`、`indeterminate`=false、`disabled`=false、`id`、`className`=""、`children` + 透传 |  |
 | **ClassificationTag** | `as`="span"、`tone`="normal"、`icon`、`className`=""、`children` + 透传 |  |
-| **ContributionDonutChart** | `items`=[]、`centerLabel`="全部"、`formatValue`=defaultValue、`selectedKey`=""、`onSelect`、`className`=""、`footer`=null、`emptyMessage`="暂无构成数据"、`layout`="standard" |  |
+| **ContributionDonutChart** | `items`=[]、`centerLabel`="全部"、`formatValue`=defaultValue、`selectedKey`=""、`onSelect`、`selectedKeys`、`onSelectionChange`、`className`=""、`footer`=null、`emptyMessage`="暂无构成数据"、`layout`="standard" |  |
 | **DataTable** | `density`="standard"、`className`="" + 透传 |  |
 | **Drawer** | `open`=true、`onClose`、`ariaLabel`、`ariaLabelledby`、`overlayClassName`=""、`className`=""、`portalTarget`、`children` |  |
 | **EmptyState** | `className`="" + 透传 |  |
