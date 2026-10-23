@@ -503,3 +503,21 @@ test("TrendAreaChart ticks trim trailing zeroes without rounding meaningful frac
   assert.deepEqual(ticks([0, 1.5], 'ratio').labels, ['1.5', '1.13', '0.75', '0.38', '0']);
   assert.match(ticks([123.4]).html, /aria-label="Point 123.40"/);
 });
+
+
+test("TrendAreaChart shows isolated values without bridging gaps or inventing zeroes", () => {
+  const render = values => renderToStaticMarkup(React.createElement(UI.TrendAreaChart, {
+    series: [{ key: 'a', label: 'Amount', points: values.map((value, i) => ({ label: String(i), value })) }],
+  }));
+  for (const value of [0, -12, 24]) {
+    const html = render([null, value, null]);
+    assert.equal((html.match(/class="isolated-point"/g) || []).length, 1);
+    assert.match(html, /l 0 0" vector-effect="non-scaling-stroke"/);
+    assert.doesNotMatch(html, /class="(?:line|area)"/);
+  }
+  const separated = render([1, 2, null, 4, null, 6]);
+  assert.equal((separated.match(/class="isolated-point"/g) || []).length, 2);
+  assert.equal((separated.match(/class="line"/g) || []).length, 1);
+  assert.doesNotMatch(render([null, null]), /isolated-point/);
+  assert.doesNotMatch(render([1, 2, 3]), /isolated-point/);
+});

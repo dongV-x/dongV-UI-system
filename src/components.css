@@ -715,3 +715,6 @@ input.youpu-checkbox-control{accent-color:var(--dv-brand);appearance:auto;flex:0
 .youpu-multi-panel .youpu-multi-option{background:transparent;border-color:transparent;border-radius:6px}
 .youpu-multi-panel .youpu-multi-option.is-all{color:var(--dv-text-muted);font-size:12px}
 .youpu-multi-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;padding:0 2px 2px}
+
+/* A round, non-scaling zero-length stroke keeps isolated readings visible at every aspect ratio. */
+.trend-area-chart-svg .isolated-point { fill: none; stroke: var(--chart-color, var(--dv-brand)); stroke-width: 6px; stroke-linecap: round; }
