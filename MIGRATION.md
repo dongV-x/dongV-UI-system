@@ -1,5 +1,9 @@
 # 迁移与升级
 
+## 1.7.0 趋势聚焦范围
+
+需要聚焦时同时传 `showYAxis` 与 `yAxisMode="focused"`；默认 `zero`，已有消费者无需修改。金额、比例、负值仍使用原数值；跨指标比较看数值与日期，不比较不同纵轴下的斜率。
+
 ## 1.6.0 环图多选
 
 - 需要多选时传 `selectedKeys` 数组与 `onSelectionChange`；显式空数组不回退单选。原 `selectedKey` / `onSelect` 消费者无需迁移。

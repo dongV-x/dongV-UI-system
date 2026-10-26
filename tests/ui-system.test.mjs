@@ -532,3 +532,51 @@ test("donut controlled multiselect highlights every selected segment and preserv
     assert.equal((html.match(/aria-pressed="true"/g) || []).length, count * 2);
   }
 });
+
+test("TrendAreaChart focused axis is opt-in, bounded and preserves real readings and gaps", () => {
+  const render = (values, valueKind = 'amount', yAxisMode, showYAxis = true) => renderToStaticMarkup(React.createElement(UI.TrendAreaChart, {
+    showYAxis, valueKind, yAxisMode,
+    series: [{key:'a',label:'Amount',color:'red',points:values.map((value,i)=>({label:`Day ${i}`,value}))}],
+  }));
+  const ticks = html => [...html.match(/class="trend-area-chart-y chart-y-axis">(.*?)<\/div>/)[1].matchAll(/<span>(.*?)<\/span>/g)].map(m=>Number(m[1].replaceAll(',','').replace('%','')));
+  for (const [values, kind] of [[[1400,1500,1450],'amount'],[[.08,.1,.09],'rate'],[[-1500,-1400],'amount'],[[-10,20],'number'],[[0,.001],'number']]) {
+    const original=ticks(render(values,kind));const focused=ticks(render(values,kind,'focused'));
+    const factor=kind==='rate'?100:1;const min=Math.min(...values)*factor,max=Math.max(...values)*factor;
+    assert.ok(focused.at(-1)<=min&&focused[0]>=max,'never clip real values');
+    assert.ok(focused[0]-focused.at(-1)>=(original[0]-original.at(-1))/2-1e-6,'at most 2x zoom');
+    assert.ok(focused[0]-focused.at(-1)<=original[0]-original.at(-1)+1e-6,'never zoom out');
+  }
+  assert.ok(ticks(render([1400,1500],'amount','focused')).at(-1)>0,'focus removes irrelevant zero baseline');
+  for (const values of [[0,0],[1400,1400],[-20,-20],[null,1400,null]]) {
+    assert.deepEqual(ticks(render(values)),ticks(render(values,'amount','focused')),'flat and isolated values keep stable scale');
+  }
+  assert.deepEqual(ticks(render([1400,1500])),ticks(render([1400,1500],'amount','unknown')));
+  const gap=render([1400,null,1500,1450],'amount','focused');
+  assert.equal((gap.match(/class="isolated-point"/g)||[]).length,1);
+  assert.equal((gap.match(/class="line"/g)||[]).length,1);
+  assert.match(gap,/aria-label="Day 0 1,400.00"/);
+  assert.match(render([null,null],'amount','focused'),/当前没有可展示的趋势数据/);
+  assert.doesNotMatch(render([1400,1500],'amount','focused',false),/chart-y-axis/);
+});
+
+
+test("focused trends retain zero days, all-zero lines and zero points beside missing days", () => {
+  const render = (values, valueKind='amount') => renderToStaticMarkup(React.createElement(UI.TrendAreaChart, {
+    showYAxis:true,yAxisMode:'focused',valueKind,
+    series:[{key:'a',label:'Value',color:'red',points:values.map((value,i)=>({label:`Day ${i}`,value}))}],
+  }));
+  for(const [values,kind] of [[[1400,0,1500],'amount'],[[.08,0,.1],'rate'],[[-10,0,-20],'amount'],[[0,0,0],'amount']]){
+    const html=render(values,kind);
+    const axis=html.match(/class="trend-area-chart-y chart-y-axis">(.*?)<\/div>/)[1];
+    assert.match(axis,/<span>0<\/span>/,'a real zero remains on the axis');
+    assert.match(html,/aria-label="Day \d 0.00"/,'zero is readable, not an empty value');
+    assert.doesNotMatch(html,/NaN|Infinity/);
+  }
+  const zeroLine=render([0,0,0]);
+  const line=zeroLine.match(/<path class="line" d="([^"]+)"/)[1];
+  assert.match(line,/M 8 228/);assert.match(line,/708 228$/);
+  const missing=render([null,0,null]);
+  assert.match(missing,/class="isolated-point"/);
+  assert.doesNotMatch(missing,/class="line"/);
+  assert.match(missing,/aria-label="Day 1 0.00"/);
+});

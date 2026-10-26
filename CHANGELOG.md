@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.0 - 2026-10-26
+
+- TrendAreaChart 增加可选 `yAxisMode="focused"`，适度缩小纵轴范围、最多放大约 2 倍；默认轴、缺数、原值与交互不变。
+
 ## 1.6.0 - 2026-10-23
 
 - 环图支持受控多选 `selectedKeys` / `onSelectionChange`，多个选中项同步强调，鼠标与键盘均可切换，保留单选API。

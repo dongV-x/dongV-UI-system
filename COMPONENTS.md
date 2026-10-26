@@ -32,7 +32,7 @@
 | **Textarea** | `invalid`=false、`rows`=3、`resize`="vertical"、`size`="medium"、`className`="" + 透传 |  |
 | **Toast** | `tone`="success"、`className`="" + 透传 |  |
 | **Tooltip** | `as`="span"、`className`="" + 透传 |  |
-| **TrendAreaChart** | `series`=[]、`label`="趋势"、`axisStep`=1、`animate`=false、`valueKind`="number"、`showYAxis`=false、`className`=""、`emptyMessage`="当前没有可展示的趋势数据"、`portalTarget` |  |
+| **TrendAreaChart** | `series`=[]、`label`="趋势"、`axisStep`=1、`animate`=false、`valueKind`="number"、`showYAxis`=false、`yAxisMode`="zero"、`className`=""、`emptyMessage`="当前没有可展示的趋势数据"、`portalTarget` |  |
 
 ## 使用纪律
 

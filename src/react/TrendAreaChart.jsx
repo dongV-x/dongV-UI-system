@@ -43,6 +43,7 @@ export default function TrendAreaChart({
   animate = false,
   valueKind = "number",
   showYAxis = false,
+  yAxisMode = "zero",
   className = "",
   emptyMessage = "当前没有可展示的趋势数据",
   portalTarget,
@@ -58,9 +59,20 @@ export default function TrendAreaChart({
   const rawMin = Math.min(...allValues);
   const rawMax = Math.max(...allValues);
   const minimumScale = valueKind === "rate" ? .04 : valueKind === "ratio" ? 1 : 4;
-  const min = rawMin >= 0 ? 0 : -niceScaleMax(Math.abs(rawMin), minimumScale);
+  let min = rawMin >= 0 ? 0 : -niceScaleMax(Math.abs(rawMin), minimumScale);
   const baseMax = rawMax > 0 ? niceScaleMax(rawMax, minimumScale) : rawMin < 0 ? 0 : niceScaleMax(0, minimumScale);
-  const max = valueKind === "amount" && rawMax > 0 ? baseMax * 1.25 : baseMax;
+  let max = valueKind === "amount" && rawMax > 0 ? baseMax * 1.25 : baseMax;
+  // Keep the legacy scale by default; focus is opt-in and never magnifies changes more than 2x.
+  if (showYAxis && yAxisMode === "focused" && rawMax > rawMin) {
+    const originalRange = max - min;
+    const span = Math.min(originalRange, Math.max(originalRange / 2, (rawMax - rawMin) * 1.4, minimumScale));
+    const low = Math.max(min, Math.min((rawMin + rawMax) / 2 - span / 2, max - span));
+    const step = niceScaleMax(span, minimumScale) / 4;
+    const focusedMin = Math.max(min, Math.floor(low / step) * step);
+    const focusedMax = Math.min(max, Math.ceil((low + span) / step) * step);
+    min = focusedMin;
+    max = focusedMax;
+  }
   const axisTickCount = 5;
   const range = max - min || 1;
   const plotTop = 30;
